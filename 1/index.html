@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Portfolio</title>
+    <title>Project 1: Image Alignment and Colorization</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f9f9f9;
         }
 
         h1, h2 {
@@ -22,7 +23,7 @@
         }
 
         section {
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
 
         p {
@@ -37,25 +38,37 @@
             border-left: 4px solid #ccc;
             margin-bottom: 20px;
         }
+
+        .results img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to My CS180 Portfolio!</h1>
+    <h1>Project 1: Image Alignment and Colorization</h1>
 
     <section>
         <h2>Overview</h2>
         <p>
-            Sergei Mikhailovich Prokudin-Gorskii (1863-1944) was an innovator: he traveled around the Russian Empire to record colored images by documenting the scenes in 3-colored channels and combining them together to create effects of color. While many manual implementations of colorizing his images exist, this project implements methods that can algorithmically colorize the photos of his collection.
+            This project implements methods to algorithmically colorize photos from Sergei Mikhailovich Prokudin-Gorskii (1863-1944) three channel collection.
         </p>
     </section>
 
     <section>
         <h2>Methods</h2>
         <p>
-            There are two key steps in recreating a colored image from three channels: Image alignment and Color Restoration. In the alignment phase, the goal is to align the three channels as closely as possible, reframing the task as an optimization problem. The objective functions used for this optimization are the Sum of Squared Difference (SSD) and Normalized Cross-Correlation (NCC).
+            The colorization process involves two steps: Image Alignment and Color Restoration. In the image alignment phase, we attempt to align the three channels as closely as possible by treating this as an optimization problem. The optimization is done using two key techniques: 
+            <strong>Sum of Squared Differences (SSD)</strong> and <strong>Normalized Cross-Correlation (NCC)</strong>.
         </p>
         <p>
-            The <strong>argmax</strong> and <strong>min</strong> functions play crucial roles in this optimization process. For example, we aim to maximize the NCC score or minimize the SSD, using <code>argmax</code> and <code>min</code> to determine the best alignment. In smaller images, we can use a brute-force search over a small displacement window, while for larger images, we use a pyramid search to progressively align images at different scales.
+            SSD works by minimizing the error magnitude between two images, acting as a residual operator. NCC, on the other hand, works similarly to a dot product, aiming to find vectors that have the smallest angles between them. 
+        </p>
+
+        <h3>Optimization Functions: <code>argmax</code> and <code>min</code></h3>
+        <p>
+            In the alignment task, we optimize for the best displacement that aligns the color channels by either minimizing the SSD using <code>min</code> or maximizing the NCC using <code>argmax</code>. These functions help find the displacement that yields the best alignment score. For small images, we can perform an exhaustive search, but for larger images, we employ a pyramid search to recursively downscale the image and optimize over smaller regions.
         </p>
         <code>
             def ncc_align(image1, image2, window_size):<br>
@@ -65,7 +78,7 @@
                     for y_displacement in range(-window_size, window_size+1):<br>
                         displacement = (x_displacement, y_displacement)<br>
                         image1_shifted = np.roll(image1, displacement, axis=(0,1))<br>
-                        ncc = normalized_cross_correlation(image1_shifted, image2)<br>
+                        ncc = ssim(image1_shifted, image2, data_range=1.0)<br>
                         if ncc > best_ncc:<br>
                             best_ncc = ncc<br>
                             best_displacement = displacement<br>
@@ -74,19 +87,39 @@
     </section>
 
     <section>
-        <h2>Results</h2>
+        <h2>Details and Techniques</h2>
         <p>
-            The algorithm successfully aligns and colorizes the digitized images from Prokudin-Gorskii's collection. Results include:
+            In my implementation, I used the blue channel as the base image and aligned the red and green channels to it. I experimented with both SSD and NCC, and found that NCC provided better alignment results. For smaller images, I used a brute-force search over a displacement window, while for larger images, I implemented a pyramid search to reduce computation time.
         </p>
-        <ul>
-            <li>Automatic cropping: Removes color borders by detecting edges based on intensity thresholds.</li>
-            <li>Automatic contrast adjustments: Rescales the image intensities to improve visual clarity.</li>
-        </ul>
+
+        <h3>Automatic Cropping</h3>
         <p>
-            Future work could involve additional enhancements such as automatic border detection and more advanced color restoration techniques.
+            To clean up the images, I implemented an automatic cropping method that removes unnecessary white or black borders by detecting the edge between the border and the image content. The cropping is based on intensity thresholding and calculating the bounding box of the actual image content.
+        </p>
+
+        <h3>Automatic Contrast Adjustment</h3>
+        <p>
+            Additionally, I implemented an automatic contrast adjustment method to improve the visual quality of the image. This rescales the image intensity such that the darkest pixel is zero and the brightest pixel is one. This simple adjustment helps make the images more visually striking without any manual intervention.
         </p>
     </section>
 
-    <a href="./1/index.html">Project 1</a>
+    <section class="results">
+        <h2>Results</h2>
+        <p>
+            Below are some examples of the colorized images generated using the automatic methods described above.
+        </p>
+        <!-- <img src="media/img1.jpg" alt="Colorized Image 1">
+        <img src="media/img2.jpg" alt="Colorized Image 2">
+        <img src="media/img3.jpg" alt="Colorized Image 3"> -->
+    </section>
+
+    <section>
+        <h2>Conclusion</h2>
+        <p>
+            The project successfully automates the process of aligning and colorizing the digitized images from Prokudin-Gorskii's collection. The results demonstrate that NCC generally produces better alignment compared to SSD, and the pyramid search significantly reduces computation time for larger images.
+        </p>
+    </section>
+
+    <a href="../index.html">Back to Main Portfolio</a>
 </body>
 </html>
