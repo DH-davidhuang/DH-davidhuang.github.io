@@ -104,14 +104,126 @@
     </section>
 
     <section class="results">
-        <h2>Results</h2>
+        <h2>Results with Green and Red Displacement</h2>
         <p>
-            Below are some examples of the colorized images generated using the automatic methods described above.
+            Below are the results from different methods. Each set of images shows different methods used to align the images, filtered by those that contain green and red displacement vectors in their filename.
         </p>
-        <!-- <img src="media/img1.jpg" alt="Colorized Image 1">
-        <img src="media/img2.jpg" alt="Colorized Image 2">
-        <img src="media/img3.jpg" alt="Colorized Image 3"> -->
+        <div class="result-grid">
+            <!-- church results -->
+            <div class="result-set">
+                <h3>Church</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="sobel_without_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Baseline Image - sobel_without_cropping">
+                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_and_automated_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="sobel_and_automated_cropping">
+                        <figcaption>sobel_and_automated_cropping</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_with_histogram_equalization_autocontrast/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="sobel_with_histogram_equalization_autocontrast">
+                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- emir results -->
+            <div class="result-set">
+                <h3>Emir</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="sobel_without_cropping/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="Baseline Image - sobel_without_cropping">
+                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_and_automated_cropping/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="sobel_and_automated_cropping">
+                        <figcaption>sobel_and_automated_cropping</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_with_histogram_equalization_autocontrast/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="sobel_with_histogram_equalization_autocontrast">
+                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- self_portrait results -->
+            <div class="result-set">
+                <h3>Self Portrait</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="sobel_without_cropping/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="Baseline Image - sobel_without_cropping">
+                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_and_automated_cropping/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="sobel_and_automated_cropping">
+                        <figcaption>sobel_and_automated_cropping</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_with_histogram_equalization_autocontrast/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="sobel_with_histogram_equalization_autocontrast">
+                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- train results -->
+            <div class="result-set">
+                <h3>Train</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="sobel_without_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Baseline Image - sobel_without_cropping">
+                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_and_automated_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="sobel_and_automated_cropping">
+                        <figcaption>sobel_and_automated_cropping</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="sobel_with_histogram_equalization_autocontrast/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="sobel_with_histogram_equalization_autocontrast">
+                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- Add more image sets similarly -->
+        </div>
     </section>
+    
+    <style>
+        .result-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+    
+        .result-set {
+            margin-bottom: 20px;
+        }
+    
+        .result-row {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+    
+        figure {
+            margin: 0;
+            text-align: center;
+        }
+    
+        figure img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+        }
+    
+        figure figcaption {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+    
 
     <section>
         <h2>Conclusion</h2>
