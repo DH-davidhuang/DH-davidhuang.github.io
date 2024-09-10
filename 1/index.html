@@ -78,20 +78,6 @@
         <p>
             In the alignment task, we optimize for the best displacement that aligns the color channels by either minimizing the SSD using <code>min</code> or maximizing the NCC using <code>argmax</code>. These functions help find the displacement that yields the best alignment score. For small images, we can perform an exhaustive search, but for larger images, we employ a pyramid search to recursively downscale the image and optimize over smaller regions.
         </p>
-        <code>
-            def ncc_align(image1, image2, window_size):<br>
-                best_displacement = (0, 0)<br>
-                best_ncc = -float('inf')<br>
-                for x_displacement in range(-window_size, window_size+1):<br>
-                    for y_displacement in range(-window_size, window_size+1):<br>
-                        displacement = (x_displacement, y_displacement)<br>
-                        image1_shifted = np.roll(image1, displacement, axis=(0,1))<br>
-                        ncc = ssim(image1_shifted, image2, data_range=1.0)<br>
-                        if ncc > best_ncc:<br>
-                            best_ncc = ncc<br>
-                            best_displacement = displacement<br>
-                return best_displacement
-        </code>
     </section>
 
     <section>
