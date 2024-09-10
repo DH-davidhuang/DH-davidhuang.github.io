@@ -60,7 +60,7 @@
     <section>
         <h2>Overview</h2>
         <p>
-            This project implements methods to algorithmically colorize photos from Sergei Mikhailovich Prokudin-Gorskii's (1863-1944) three channel collection.
+            This project implements methods to algorithmically colorize photos from Sergei Mikhailovich Prokudin-Gorskii's (1863-1944) three-channel collection.
         </p>
     </section>
 
@@ -71,19 +71,48 @@
             <strong>Sum of Squared Differences (SSD)</strong> and <strong>Normalized Cross-Correlation (NCC)</strong>.
         </p>
         <p>
-            SSD works by minimizing the error magnitude between two image while NCC aims to find vectors that have the smallest angles between them. 
+            SSD works by minimizing the error magnitude between two images, while NCC aims to find vectors that have the smallest angles between them.
         </p>
 
         <h3>Optimization Functions: <code>argmax</code> and <code>min</code></h3>
         <p>
             In the alignment task, we optimize for the best displacement that aligns the color channels by either minimizing the SSD using <code>min</code> or maximizing the NCC using <code>argmax</code>. These functions help find the displacement that yields the best alignment score. For small images, we can perform an exhaustive search, but for larger images, we employ a pyramid search to recursively downscale the image and optimize over smaller regions.
         </p>
+
+        <h3>Sum of Squared Differences (SSD)</h3>
+        <p>
+            The SSD is calculated by minimizing the squared pixel intensity differences between two images. This can be represented mathematically as:
+        </p>
+        <p>
+            <code>
+            SSD(d) = ∑<sub>x,y</sub> (I<sub>1</sub>(x + d<sub>x</sub>, y + d<sub>y</sub>) - I<sub>2</sub>(x, y))²
+            </code>
+        </p>
+        <p>
+            Here, <code>d</code> is the displacement vector, and <code>I<sub>1</sub></code> and <code>I<sub>2</sub></code> are the intensities of the two images at pixel positions <code>(x, y)</code>.
+        </p>
+
+        <h3>Normalized Cross-Correlation (NCC)</h3>
+        <p>
+            The NCC is used to find the displacement that results in the best correlation between two images. It is represented by:
+        </p>
+        <p>
+            <code>
+            NCC(d) = ∑<sub>x,y</sub> (I<sub>1</sub>(x + d<sub>x</sub>, y + d<sub>y</sub>) - μ<sub>1</sub>) (I<sub>2</sub>(x, y) - μ<sub>2</sub>)
+            </code> /
+            <code>
+            √(∑<sub>x,y</sub> (I<sub>1</sub>(x + d<sub>x</sub>, y + d<sub>y</sub>) - μ<sub>1</sub>)² ∑<sub>x,y</sub> (I<sub>2</sub>(x, y) - μ<sub>2</sub>)²)
+            </code>
+        </p>
+        <p>
+            Here, <code>μ<sub>1</sub></code> and <code>μ<sub>2</sub></code> are the mean intensity values of the two images.
+        </p>
     </section>
 
     <section>
         <h2>Details and Techniques</h2>
         <p>
-            In my implementation, I used the blue channel as the base image and aligned the red and green channels to it. I experimented with both SSD and NCC, and found that NCC provided better alignment results. For smaller images, I used a brute-force search over a displacement window, while for larger images, I implemented a pyramid search to reduce computation time.
+            In my implementation, I used the blue channel as the base image and aligned the red and green channels to it. I experimented with both SSD and NCC and found that NCC provided better alignment results. For smaller images, I used a brute-force search over a displacement window, while for larger images, I implemented a pyramid search to reduce computation time.
         </p>
 
         <h3>Automatic Cropping</h3>
@@ -93,18 +122,56 @@
 
         <h3>Automatic Contrast Adjustment</h3>
         <p>
-            Additionally, I implemented an automatic contrast adjustment method to improve the visual quality of the image. This rescales the image intensity such that the darkest pixel is zero and the brightest pixel is one. This simple adjustment helps make the images more visually striking without any manual intervention.
+            Additionally, I implemented an automatic contrast adjustment method to improve the visual quality of the image. This rescaled the image intensity such that the darkest pixel is zero and the brightest pixel is one. This simple adjustment helps make the images more visually striking without any manual intervention.
         </p>
+
+        <h3>Advanced Contrast and Cropping Techniques</h3>
+        <p>
+            In addition to simple intensity rescaling, I incorporated various advanced techniques to further enhance the visual quality of the images:
+        </p>
+
+        <ul>
+            <li>
+                <strong>Sobel Filter with Automated Cropping:</strong> This technique uses the Sobel filter to detect edges in the image and then automatically crops unnecessary borders based on these edges. By emphasizing regions of high contrast, the image retains only the most important content. 
+                <br>
+                Example: <code>sobel_and_automated_cropping_sobel_filter_crop</code>.
+            </li>
+            <li>
+                <strong>Histogram Equalization:</strong> This redistributes pixel intensities to improve contrast. Dark areas become lighter, and light areas become more prominent, providing a balanced contrast across the image.
+                <br>
+                Example: <code>sobel_with_histogram_equalization_autocontrast</code>.
+            </li>
+            <li>
+                <strong>Adaptive CLAHE (Contrast Limited Histogram Equalization):</strong> An advanced form of histogram equalization that adjusts contrast locally in small image regions, enhancing fine details without over-amplifying noise in homogeneous areas.
+                <br>
+                Example: <code>sobel_set_cropping_and_autocontrasting_clahe</code>.
+            </li>
+            <li>
+                <strong>Automatic White Balancing:</strong> Corrects color casts and ensures that white areas appear truly white by adjusting for the color temperature of the light source.
+                <br>
+                Example: <code>sobel_with_automatic_white_balancing</code>.
+            </li>
+            <li>
+                <strong>Dynamic Thresholding for Cropping:</strong> This method dynamically adjusts thresholds for cropping based on intensity distributions, which allows for precise removal of unwanted areas.
+                <br>
+                Example: <code>sobel_and_automated_cropping_dynamic_threshold</code>.
+            </li>
+            <li>
+                <strong>Linear Autocontrast:</strong> This technique linearly scales the pixel values to fill the available intensity range, improving overall brightness and contrast.
+                <br>
+                Example: <code>sobel_with_linear_autocontrast</code>.
+            </li>
+        </ul>
     </section>
+</body>
+
     
-    <!-- Pyramid Displacement Images Section -->
     <section class="results">
         <h2>Results: Pyramid Displacement Images</h2>
         <p>
             Below are the results from the pyramid displacement images, filtered by those that contain green and red displacement vectors in their filenames.
         </p>
         <div class="result-grid">
-            <!-- church results -->
             <div class="result-set">
                 <h3>Church</h3>
                 <div class="result-row">
@@ -115,7 +182,6 @@
                 </div>
             </div>
 
-            <!-- melons results -->
             <div class="result-set">
                 <h3>Melons</h3>
                 <div class="result-row">
@@ -126,7 +192,6 @@
                 </div>
             </div>
 
-            <!-- onion_church results -->
             <div class="result-set">
                 <h3>Onion Church</h3>
                 <div class="result-row">
@@ -137,7 +202,6 @@
                 </div>
             </div>
 
-            <!-- emir results -->
             <div class="result-set">
                 <h3>Emir</h3>
                 <div class="result-row">
@@ -148,7 +212,6 @@
                 </div>
             </div>
 
-            <!-- harvesters results -->
             <div class="result-set">
                 <h3>Harvesters</h3>
                 <div class="result-row">
@@ -159,7 +222,6 @@
                 </div>
             </div>
 
-            <!-- icon results -->
             <div class="result-set">
                 <h3>Icon</h3>
                 <div class="result-row">
@@ -170,7 +232,6 @@
                 </div>
             </div>
 
-            <!-- lady results -->
             <div class="result-set">
                 <h3>Lady</h3>
                 <div class="result-row">
@@ -181,7 +242,6 @@
                 </div>
             </div>
 
-            <!-- self_portrait results -->
             <div class="result-set">
                 <h3>Self Portrait</h3>
                 <div class="result-row">
@@ -192,7 +252,6 @@
                 </div>
             </div>
 
-            <!-- sculpture results -->
             <div class="result-set">
                 <h3>Sculpture</h3>
                 <div class="result-row">
@@ -203,7 +262,6 @@
                 </div>
             </div>
 
-            <!-- three_generations results -->
             <div class="result-set">
                 <h3>Three Generations</h3>
                 <div class="result-row">
@@ -214,7 +272,6 @@
                 </div>
             </div>
 
-            <!-- train results -->
             <div class="result-set">
                 <h3>Train</h3>
                 <div class="result-row">
@@ -227,14 +284,12 @@
         </div>
     </section>
 
-    <!-- Single-Scale Images Section -->
     <section class="results">
         <h2>Results: Single-Scale Images</h2>
         <p>
             Below are the results from single-scale images where I search a space of [-15, 15] window for both x and y image coordinates.
         </p>
         <div class="result-grid">
-            <!-- monastery results -->
             <div class="result-set">
                 <h3>Monastery</h3>
                 <div class="result-row">
@@ -245,7 +300,6 @@
                 </div>
             </div>
     
-            <!-- cathedral results -->
             <div class="result-set">
                 <h3>Cathedral</h3>
                 <div class="result-row">
@@ -256,7 +310,6 @@
                 </div>
             </div>
     
-            <!-- tobolsk results -->
             <div class="result-set">
                 <h3>Tobolsk</h3>
                 <div class="result-row">
