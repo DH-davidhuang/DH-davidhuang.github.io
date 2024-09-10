@@ -103,7 +103,7 @@
 
         <h3>Optimization Functions: <code>argmax</code> and <code>min</code></h3>
         <p>
-            In the alignment task, we optimize for the best displacement that aligns the color channels by either minimizing the SSD using <code>min</code> or maximizing the NCC using <code>argmax</code>. These functions help find the displacement that yields the best alignment score. For small images, we can perform an exhaustive search, but for larger images, we employ a pyramid search to recursively downscale the image and optimize over smaller regions.
+            In the alignment task, I optimized for the best displacement that aligns the color channels by either minimizing the SSD using <code>min</code> or maximizing the NCC using <code>argmax</code>. These functions help find the displacement that yields the best alignment score. For small images, I can perform an exhaustive search over a large window, but for larger images, the shifts will most likely not lie in this range and there are way more pixels to compute due to higher number of pixels in high resolution photos, so I employed a pyramid search to recursively downscale the image and optimize over smaller regions.
         </p>
 
         <h3>Sum of Squared Differences (SSD)</h3>
@@ -134,7 +134,7 @@
     <section>
         <h2>Details and Techniques</h2>
         <p>
-            In my implementation, I used the blue channel as the base image and aligned the red and green channels to it. I experimented with both SSD and NCC and found that NCC provided better alignment results. For smaller images, I used a brute-force search over a displacement window, while for larger images, I implemented a pyramid search to reduce computation time.
+            In my implementation, I used the blue channel as the base image and aligned the red and green channels to it. I experimented with both SSD and NCC and found that NCC provided better alignment results. For smaller images, I used a brute-force search over a displacement window, while for larger images, I implemented a pyramid search to reduce computation time. I also found that using the sobel edge detector filter really improved the result for emir image specifically so I added that into my implementation presumambly this is because distributional brightness and pixel intensity across pixel channels being too different. As such I simply used this across all photos to get consistently good results.
         </p>
 
         <h3>Automatic Cropping</h3>
@@ -154,35 +154,17 @@
 
         <ul>
             <li>
-                <strong>Sobel Filter with Automated Cropping:</strong> This technique uses the Sobel filter to detect edges in the image and then automatically crops unnecessary borders based on these edges. By emphasizing regions of high contrast, the image retains only the most important content. 
-                <br>
-                Example: <code>sobel_and_automated_cropping_sobel_filter_crop</code>.
-            </li>
+                <strong>Sobel Filter with Automated Cropping:</strong> This technique uses the Sobel filter to detect edges in the image and then automatically crops unnecessary borders based on an edge mask I believe. 
             <li>
-                <strong>Histogram Equalization:</strong> This redistributes pixel intensities to improve contrast. Dark areas become lighter, and light areas become more prominent, providing a balanced contrast across the image.
-                <br>
-                Example: <code>sobel_with_histogram_equalization_autocontrast</code>.
-            </li>
+                <strong>Histogram Equalization:</strong> This redistributes pixel intensities to improve contrast. Dark areas become lighter, and light areas become more prominent - basically what Professor Efros mentioned in lecture today with the cumulative histogram rescaling!!
             <li>
-                <strong>Adaptive CLAHE (Contrast Limited Histogram Equalization):</strong> An advanced form of histogram equalization that adjusts contrast locally in small image regions, enhancing fine details without over-amplifying noise in homogeneous areas.
-                <br>
-                Example: <code>sobel_set_cropping_and_autocontrasting_clahe</code>.
-            </li>
+                <strong>Adaptive CLAHE (Contrast Limited Histogram Equalization):</strong> Apparently this does the same histogram equalization but does so on a local level as well. See below for some pretty cool results.
             <li>
-                <strong>Automatic White Balancing:</strong> Corrects color casts and ensures that white areas appear truly white by adjusting for the color temperature of the light source.
-                <br>
-                Example: <code>sobel_with_automatic_white_balancing</code>.
-            </li>
+                <strong>Automatic White Balancing:</strong> Tries to formulate a solution where white areas appear truly white by adjusting for the color temperature of the light source.
             <li>
-                <strong>Dynamic Thresholding for Cropping:</strong> This method dynamically adjusts thresholds for cropping based on intensity distributions, which allows for precise removal of unwanted areas.
-                <br>
-                Example: <code>sobel_and_automated_cropping_dynamic_threshold</code>.
-            </li>
+                <strong>Dynamic Thresholding for Cropping:</strong> This method automates the dynamic or learnable thresholds for cropping based on intensity distributions instead of an manual threshold.
             <li>
-                <strong>Linear Autocontrast:</strong> This technique linearly scales the pixel values to fill the available intensity range, improving overall brightness and contrast.
-                <br>
-                Example: <code>sobel_with_linear_autocontrast</code>.
-            </li>
+                <strong>Linear Autocontrast:</strong> This technique linearly scales the pixel values to fill the available intensity range much like the histogram methodology. 
         </ul>
     </section>
 </body>
@@ -276,73 +258,200 @@
             <div class="result-set">
                 <h3>Harvesters</h3>
                 <div class="result-row">
+                    <!-- Original without cropping -->
                     <figure>
-                        <img src="media/sobel_without_cropping/harvesters_green_displacement_(60, 14)_red_displacement_(123, 11).jpg" alt="Harvesters Green Displacement: 60,14 Red Displacement: 123,11">
+                        <img src="media/sobel_without_cropping/harvesters_green_displacement_(60, 14)_red_displacement_(123, 11).jpg" alt="Harvesters Without Cropping">
+                        <figcaption>Green Displacement: (60, 14), Red Displacement: (123, 11)</figcaption>
+                    </figure>
+            
+                    <!-- Linear Autocontrast -->
+                    <figure>
+                        <img src="media/sobel_with_linear_autocontrast/harvesters_green_displacement_(60, 17)_red_displacement_(123, 11).jpg" alt="Harvesters Linear Autocontrast">
+                        <figcaption>Green Displacement: (60, 17), Red Displacement: (123, 11)</figcaption>
+                    </figure>
+            
+                    <!-- Histogram Equalization Autocontrast -->
+                    <figure>
+                        <img src="media/sobel_with_histogram_equalization_autocontrast/harvesters_green_displacement_(60, 13)_red_displacement_(123, 10).jpg" alt="Harvesters Histogram Equalization Autocontrast">
+                        <figcaption>Green Displacement: (60, 13), Red Displacement: (123, 10)</figcaption>
+                    </figure>
+            
+                    <!-- CLAHE Autocontrast -->
+                    <figure>
+                        <img src="media/sobel_set_cropping_and_autocontrasting_clahe/harvesters_green_displacement_(60, 13)_red_displacement_(118, 10).jpg" alt="Harvesters CLAHE Autocontrast">
+                        <figcaption>Green Displacement: (60, 13), Red Displacement: (118, 10)</figcaption>
+                    </figure>
+            
+                    <!-- Dynamic Threshold Cropping -->
+                    <figure>
+                        <img src="media/sobel_and_automated_cropping_dynamic_threshold/harvesters_green_displacement_(60, 14)_red_displacement_(123, 11).jpg" alt="Harvesters Dynamic Threshold Cropping">
                         <figcaption>Green Displacement: (60, 14), Red Displacement: (123, 11)</figcaption>
                     </figure>
                 </div>
             </div>
 
-            <div class="result-set">
-                <h3>Icon</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/sobel_without_cropping/icon_green_displacement_(41, 16)_red_displacement_(90, 23).jpg" alt="Icon Green Displacement: 41,16 Red Displacement: 90,23">
-                        <figcaption>Green Displacement: (41, 16), Red Displacement: (90, 23)</figcaption>
-                    </figure>
-                </div>
-            </div>
-
-            <div class="result-set">
-                <h3>Lady</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/sobel_without_cropping/lady_green_displacement_(59, -9)_red_displacement_(122, -15).jpg" alt="Lady Green Displacement: 59,-9 Red Displacement: 122,-15">
-                        <figcaption>Green Displacement: (59, -9), Red Displacement: (122, -15)</figcaption>
-                    </figure>
-                </div>
-            </div>
-
-            <div class="result-set">
-                <h3>Self Portrait</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/sobel_without_cropping/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="Self Portrait Green Displacement: 78,29 Red Displacement: 175,37">
-                        <figcaption>Green Displacement: (78, 29), Red Displacement: (175, 37)</figcaption>
-                    </figure>
-                </div>
-            </div>
-
-            <div class="result-set">
-                <h3>Sculpture</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/sobel_without_cropping/sculpture_green_displacement_(33, -11)_red_displacement_(140, -27).jpg" alt="Sculpture Green Displacement: 33,-11 Red Displacement: 140,-27">
-                        <figcaption>Green Displacement: (33, -11), Red Displacement: (140, -27)</figcaption>
-                    </figure>
-                </div>
-            </div>
-
-            <div class="result-set">
-                <h3>Three Generations</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/sobel_without_cropping/three_generations_green_displacement_(56, 12)_red_displacement_(111, 8).jpg" alt="Three Generations Green Displacement: 56,12 Red Displacement: 111,8">
-                        <figcaption>Green Displacement: (56, 12), Red Displacement: (111, 8)</figcaption>
-                    </figure>
-                </div>
-            </div>
-
-            <div class="result-set">
-                <h3>Train</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/sobel_without_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train Green Displacement: 41,1 Red Displacement: 85,29">
-                        <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
-                    </figure>
-                </div>
+        <!-- Icon Results -->
+        <div class="result-set">
+            <h3>Icon</h3>
+            <div class="result-row">
+                <figure>
+                    <img src="media/sobel_without_cropping/icon_green_displacement_(41, 16)_red_displacement_(90, 23).jpg" alt="Icon Without Cropping">
+                    <figcaption>Green Displacement: (41, 16), Red Displacement: (90, 23)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_linear_autocontrast/icon_green_displacement_(41, 16)_red_displacement_(90, 23).jpg" alt="Icon Linear Autocontrast">
+                    <figcaption>Green Displacement: (41, 16), Red Displacement: (90, 23)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_histogram_equalization_autocontrast/icon_green_displacement_(38, 16)_red_displacement_(90, 23).jpg" alt="Icon Histogram Equalization Autocontrast">
+                    <figcaption>Green Displacement: (38, 16), Red Displacement: (90, 23)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_set_cropping_and_autocontrasting_clahe/icon_green_displacement_(39, 16)_red_displacement_(90, 23).jpg" alt="Icon CLAHE Autocontrast">
+                    <figcaption>Green Displacement: (39, 16), Red Displacement: (90, 23)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_and_automated_cropping_dynamic_threshold/icon_green_displacement_(41, 16)_red_displacement_(90, 23).jpg" alt="Icon Dynamic Threshold Cropping">
+                    <figcaption>Green Displacement: (41, 16), Red Displacement: (90, 23)</figcaption>
+                </figure>
             </div>
         </div>
+
+        <!-- Lady Results -->
+        <div class="result-set">
+            <h3>Lady</h3>
+            <div class="result-row">
+                <figure>
+                    <img src="media/sobel_without_cropping/lady_green_displacement_(59, -9)_red_displacement_(122, -15).jpg" alt="Lady Without Cropping">
+                    <figcaption>Green Displacement: (59, -9), Red Displacement: (122, -15)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_linear_autocontrast/lady_green_displacement_(59, -9)_red_displacement_(122, -15).jpg" alt="Lady Linear Autocontrast">
+                    <figcaption>Green Displacement: (59, -9), Red Displacement: (122, -15)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_histogram_equalization_autocontrast/lady_green_displacement_(57, -1)_red_displacement_(122, -15).jpg" alt="Lady Histogram Equalization Autocontrast">
+                    <figcaption>Green Displacement: (57, -1), Red Displacement: (122, -15)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_set_cropping_and_autocontrasting_clahe/lady_green_displacement_(59, -6)_red_displacement_(87, -21).jpg" alt="Lady CLAHE Autocontrast">
+                    <figcaption>Green Displacement: (59, -6), Red Displacement: (87, -21)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_and_automated_cropping_dynamic_threshold/lady_green_displacement_(59, -9)_red_displacement_(122, -15).jpg" alt="Lady Dynamic Threshold Cropping">
+                    <figcaption>Green Displacement: (59, -9), Red Displacement: (122, -15)</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Self Portrait Results -->
+        <div class="result-set">
+            <h3>Self Portrait</h3>
+            <div class="result-row">
+                <figure>
+                    <img src="media/sobel_without_cropping/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="Self Portrait Without Cropping">
+                    <figcaption>Green Displacement: (78, 29), Red Displacement: (175, 37)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_linear_autocontrast/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="Self Portrait Linear Autocontrast">
+                    <figcaption>Green Displacement: (78, 29), Red Displacement: (175, 37)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_histogram_equalization_autocontrast/self_portrait_green_displacement_(78, 28)_red_displacement_(175, 37).jpg" alt="Self Portrait Histogram Equalization Autocontrast">
+                    <figcaption>Green Displacement: (78, 28), Red Displacement: (175, 37)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_set_cropping_and_autocontrasting_clahe/self_portrait_green_displacement_(77, 27)_red_displacement_(175, 37).jpg" alt="Self Portrait CLAHE Autocontrast">
+                    <figcaption>Green Displacement: (77, 27), Red Displacement: (175, 37)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_and_automated_cropping_dynamic_threshold/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="Self Portrait Dynamic Threshold Cropping">
+                    <figcaption>Green Displacement: (78, 29), Red Displacement: (175, 37)</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Sculpture Results -->
+        <div class="result-set">
+            <h3>Sculpture</h3>
+            <div class="result-row">
+                <figure>
+                    <img src="media/sobel_without_cropping/sculpture_green_displacement_(33, -11)_red_displacement_(140, -27).jpg" alt="Sculpture Without Cropping">
+                    <figcaption>Green Displacement: (33, -11), Red Displacement: (140, -27)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_linear_autocontrast/sculpture_green_displacement_(33, -11)_red_displacement_(140, -27).jpg" alt="Sculpture Linear Autocontrast">
+                    <figcaption>Green Displacement: (33, -11), Red Displacement: (140, -27)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_histogram_equalization_autocontrast/sculpture_green_displacement_(33, -11)_red_displacement_(140, -27).jpg" alt="Sculpture Histogram Equalization Autocontrast">
+                    <figcaption>Green Displacement: (33, -11), Red Displacement: (140, -27)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_set_cropping_and_autocontrasting_clahe/sculpture_green_displacement_(33, -11)_red_displacement_(140, -27).jpg" alt="Sculpture CLAHE Autocontrast">
+                    <figcaption>Green Displacement: (33, -11), Red Displacement: (140, -27)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_and_automated_cropping_dynamic_threshold/sculpture_green_displacement_(33, -11)_red_displacement_(140, -27).jpg" alt="Sculpture Dynamic Threshold Cropping">
+                    <figcaption>Green Displacement: (33, -11), Red Displacement: (140, -27)</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Three Generations Results -->
+        <div class="result-set">
+            <h3>Three Generations</h3>
+            <div class="result-row">
+                <figure>
+                    <img src="media/sobel_without_cropping/three_generations_green_displacement_(56, 12)_red_displacement_(111, 8).jpg" alt="Three Generations Without Cropping">
+                    <figcaption>Green Displacement: (56, 12), Red Displacement: (111, 8)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_linear_autocontrast/three_generations_green_displacement_(56, 12)_red_displacement_(111, 8).jpg" alt="Three Generations Linear Autocontrast">
+                    <figcaption>Green Displacement: (56, 12), Red Displacement: (111, 8)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_histogram_equalization_autocontrast/three_generations_green_displacement_(56, 12)_red_displacement_(107, 7).jpg" alt="Three Generations Histogram Equalization Autocontrast">
+                    <figcaption>Green Displacement: (56, 12), Red Displacement: (107, 7)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_set_cropping_and_autocontrasting_clahe/three_generations_green_displacement_(56, 11)_red_displacement_(115, 11).jpg" alt="Three Generations CLAHE Autocontrast">
+                    <figcaption>Green Displacement: (56, 11), Red Displacement: (115, 11)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_and_automated_cropping_dynamic_threshold/three_generations_green_displacement_(56, 12)_red_displacement_(111, 8).jpg" alt="Three Generations Dynamic Threshold Cropping">
+                    <figcaption>Green Displacement: (56, 12), Red Displacement: (111, 8)</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Train Results -->
+        <div class="result-set">
+            <h3>Train</h3>
+            <div class="result-row">
+                <figure>
+                    <img src="media/sobel_without_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train Without Cropping">
+                    <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_linear_autocontrast/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train Linear Autocontrast">
+                    <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_with_histogram_equalization_autocontrast/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train Histogram Equalization Autocontrast">
+                    <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_set_cropping_and_autocontrasting_clahe/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train CLAHE Autocontrast">
+                    <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sobel_and_automated_cropping_dynamic_threshold/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train Dynamic Threshold Cropping">
+                    <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
+                </figure>
+            </div>
+        </div>
+
     </section>
 
     <section class="results">
