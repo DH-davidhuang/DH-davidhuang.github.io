@@ -102,11 +102,55 @@
             Additionally, I implemented an automatic contrast adjustment method to improve the visual quality of the image. This rescales the image intensity such that the darkest pixel is zero and the brightest pixel is one. This simple adjustment helps make the images more visually striking without any manual intervention.
         </p>
     </section>
+    <section class="results">
+        <h2>Results: Single-Scale Images</h2>
+        <p>
+            Below are the results from single-scale images, showing the baselines filtered by those that contain green and red displacement vectors in their filenames.
+        </p>
+        <div class="result-grid">
+            <!-- monastery results -->
+            <div class="result-set">
+                <h3>Monastery</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="media/cs180-env/monastery_green_displacement_(-3, 2)_red_displacement_(3, 2).jpg" alt="Baseline Image - Green: -3,2 Red: 3,2">
+                        <figcaption>Green Displacement: (-3, 2), Red Displacement: (3, 2)</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/cs180-env/monastery_green_displacement_(3, 2)_red_displacement_(6, 3).jpg" alt="Green: 3,2 Red: 6,3">
+                        <figcaption>Green Displacement: (3, 2), Red Displacement: (6, 3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- cathedral results -->
+            <div class="result-set">
+                <h3>Cathedral</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="media/cs180-env/cathedral_green_displacement_(5, 2)_red_displacement_(12, 3).jpg" alt="Baseline Image - Green: 5,2 Red: 12,3">
+                        <figcaption>Green Displacement: (5, 2), Red Displacement: (12, 3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- tobolsk results -->
+            <div class="result-set">
+                <h3>Tobolsk</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="media/cs180-env/tobolsk_green_displacement_(3, 2)_red_displacement_(6, 3).jpg" alt="Baseline Image - Green: 3,2 Red: 6,3">
+                        <figcaption>Green Displacement: (3, 2), Red Displacement: (6, 3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="results">
-        <h2>Results with Green and Red Displacement</h2>
+        <h2>Results: Pyramid Displacement Images</h2>
         <p>
-            Below are the results from different methods. Each set of images shows different methods used to align the images, filtered by those that contain green and red displacement vectors in their filename.
+            Below are the results from the pyramid displacement images, filtered by those that contain green and red displacement vectors in their filenames.
         </p>
         <div class="result-grid">
             <!-- church results -->
@@ -114,54 +158,30 @@
                 <h3>Church</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="sobel_without_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Baseline Image - sobel_without_cropping">
-                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="sobel_and_automated_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="sobel_and_automated_cropping">
-                        <figcaption>sobel_and_automated_cropping</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="sobel_with_histogram_equalization_autocontrast/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="sobel_with_histogram_equalization_autocontrast">
-                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                        <img src="media/sobel_without_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Church Green Displacement: 25,4 Red Displacement: 58,-4">
+                        <figcaption>Green Displacement: (25, 4), Red Displacement: (58, -4)</figcaption>
                     </figure>
                 </div>
             </div>
     
-            <!-- emir results -->
+            <!-- melons results -->
             <div class="result-set">
-                <h3>Emir</h3>
+                <h3>Melons</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="Baseline Image - sobel_without_cropping">
-                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="media/sobel_and_automated_cropping/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="sobel_and_automated_cropping">
-                        <figcaption>sobel_and_automated_cropping</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="media/sobel_with_histogram_equalization_autocontrast/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="sobel_with_histogram_equalization_autocontrast">
-                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                        <img src="media/sobel_without_cropping/melons_green_displacement_(87, 7)_red_displacement_(177, 12).jpg" alt="Melons Green Displacement: 87,7 Red Displacement: 177,12">
+                        <figcaption>Green Displacement: (87, 7), Red Displacement: (177, 12)</figcaption>
                     </figure>
                 </div>
             </div>
     
-            <!-- self_portrait results -->
+            <!-- onion_church results -->
             <div class="result-set">
-                <h3>Self Portrait</h3>
+                <h3>Onion Church</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="Baseline Image - sobel_without_cropping">
-                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="media/sobel_and_automated_cropping/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="sobel_and_automated_cropping">
-                        <figcaption>sobel_and_automated_cropping</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="media/sobel_with_histogram_equalization_autocontrast/self_portrait_green_displacement_(78, 29)_red_displacement_(175, 37).jpg" alt="sobel_with_histogram_equalization_autocontrast">
-                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                        <img src="media/sobel_without_cropping/onion_church_green_displacement_(52, 24)_red_displacement_(107, 35).jpg" alt="Onion Church Green Displacement: 52,24 Red Displacement: 107,35">
+                        <figcaption>Green Displacement: (52, 24), Red Displacement: (107, 35)</figcaption>
                     </figure>
                 </div>
             </div>
@@ -171,23 +191,15 @@
                 <h3>Train</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Baseline Image - sobel_without_cropping">
-                        <figcaption>Baseline (sobel_without_cropping)</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="media/sobel_and_automated_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="sobel_and_automated_cropping">
-                        <figcaption>sobel_and_automated_cropping</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="media/sobel_with_histogram_equalization_autocontrast/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="sobel_with_histogram_equalization_autocontrast">
-                        <figcaption>sobel_with_histogram_equalization_autocontrast</figcaption>
+                        <img src="media/sobel_without_cropping/train_green_displacement_(41, 1)_red_displacement_(85, 29).jpg" alt="Train Green Displacement: 41,1 Red Displacement: 85,29">
+                        <figcaption>Green Displacement: (41, 1), Red Displacement: (85, 29)</figcaption>
                     </figure>
                 </div>
             </div>
-    
-            <!-- Add more image sets similarly -->
         </div>
     </section>
+    
+    
     
     <style>
         .result-grid {
