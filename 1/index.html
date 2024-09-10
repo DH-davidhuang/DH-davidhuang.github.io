@@ -60,7 +60,7 @@
     <section>
         <h2>Overview</h2>
         <p>
-            This project implements methods to algorithmically colorize photos from Sergei Mikhailovich Prokudin-Gorskii (1863-1944) three channel collection.
+            This project implements methods to algorithmically colorize photos from Sergei Mikhailovich Prokudin-Gorskii's (1863-1944) three channel collection.
         </p>
     </section>
 
@@ -71,7 +71,7 @@
             <strong>Sum of Squared Differences (SSD)</strong> and <strong>Normalized Cross-Correlation (NCC)</strong>.
         </p>
         <p>
-            SSD works by minimizing the error magnitude between two images, acting as a residual operator. NCC, on the other hand, works similarly to a dot product, aiming to find vectors that have the smallest angles between them. 
+            SSD works by minimizing the error magnitude between two image while NCC aims to find vectors that have the smallest angles between them. 
         </p>
 
         <h3>Optimization Functions: <code>argmax</code> and <code>min</code></h3>
@@ -97,48 +97,6 @@
         </p>
     </section>
     
-    <!-- Single-Scale Images Section -->
-    <section class="results">
-        <h2>Results: Single-Scale Images</h2>
-        <p>
-            Below are the results from single-scale images where I search a space of [-15, 15] window for both x and y image coordinates.
-        </p>
-        <div class="result-grid">
-            <!-- monastery results -->
-            <div class="result-set">
-                <h3>Monastery</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/_green_displacement_(-3, 2)_red_displacement_(3, 2)monastery.jpg" alt="Baseline Image - Green: -3,2 Red: 3,2">
-                        <figcaption>Green Displacement: (-3, 2), Red Displacement: (3, 2)</figcaption>
-                    </figure>
-                </div>
-            </div>
-    
-            <!-- cathedral results -->
-            <div class="result-set">
-                <h3>Cathedral</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/_green_displacement_(5, 2)_red_displacement_(12, 3)cathedral.jpg" alt="Baseline Image - Green: 5,2 Red: 12,3">
-                        <figcaption>Green Displacement: (5, 2), Red Displacement: (12, 3)</figcaption>
-                    </figure>
-                </div>
-            </div>
-    
-            <!-- tobolsk results -->
-            <div class="result-set">
-                <h3>Tobolsk</h3>
-                <div class="result-row">
-                    <figure>
-                        <img src="media/_green_displacement_(3, 2)_red_displacement_(6, 3)tobolsk.jpg" alt="Baseline Image - Green: 3,2 Red: 6,3">
-                        <figcaption>Green Displacement: (3, 2), Red Displacement: (6, 3)</figcaption>
-                    </figure>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Pyramid Displacement Images Section -->
     <section class="results">
         <h2>Results: Pyramid Displacement Images</h2>
@@ -268,6 +226,48 @@
             </div>
         </div>
     </section>
+
+    <!-- Single-Scale Images Section -->
+    <section class="results">
+        <h2>Results: Single-Scale Images</h2>
+        <p>
+            Below are the results from single-scale images where I search a space of [-15, 15] window for both x and y image coordinates.
+        </p>
+        <div class="result-grid">
+            <!-- monastery results -->
+            <div class="result-set">
+                <h3>Monastery</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="media/_green_displacement_(-3, 2)_red_displacement_(3, 2)monastery.jpg" alt="Baseline Image - Green: -3,2 Red: 3,2">
+                        <figcaption>Green Displacement: (-3, 2), Red Displacement: (3, 2)</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- cathedral results -->
+            <div class="result-set">
+                <h3>Cathedral</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="media/_green_displacement_(5, 2)_red_displacement_(12, 3)cathedral.jpg" alt="Baseline Image - Green: 5,2 Red: 12,3">
+                        <figcaption>Green Displacement: (5, 2), Red Displacement: (12, 3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+    
+            <!-- tobolsk results -->
+            <div class="result-set">
+                <h3>Tobolsk</h3>
+                <div class="result-row">
+                    <figure>
+                        <img src="media/_green_displacement_(3, 2)_red_displacement_(6, 3)tobolsk.jpg" alt="Baseline Image - Green: 3,2 Red: 6,3">
+                        <figcaption>Green Displacement: (3, 2), Red Displacement: (6, 3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>    
 
 
     <section>
