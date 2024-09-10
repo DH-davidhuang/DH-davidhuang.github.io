@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project 1: Image Alignment and Colorization</title>
     <style>
         body {
@@ -31,39 +33,52 @@
             line-height: 1.6;
         }
 
-        code {
-            display: block;
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-left: 4px solid #ccc;
-            margin-bottom: 20px;
-        }
-
-        .results img {
-        max-width: 25%;
-        height: auto;
-        margin: 10px auto;
-        }
-
-        figure img {
-        max-width: 150px;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-        }
-
         .result-row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column; 
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .result-set {
+            margin-bottom: 50px;
         }
 
         figure {
-        text-align: center;
-        margin: 20px 0;
+            margin: 0;
+            text-align: center;
+            width: 220px; /* Fixes image size */
         }
-    
+
+        figure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px;
+        }
+
+        figure img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        figure figcaption {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .result-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            figure {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -172,49 +187,88 @@
     </section>
 </body>
 
-    
-    <section class="results">
-        <h2>Results: Pyramid Displacement Images</h2>
-        <p>
-            Below are the results from the pyramid displacement images, filtered by those that contain green and red displacement vectors in their filenames.
-        </p>
-        <div class="result-grid">
+     <!-- Pyramid Displacement Images -->
+        <section class="results">
+            <h2>Results: Pyramid Displacement Images</h2>
+            <p>Below are the results from pyramid displacement images, filtered by those that contain green and red displacement vectors in their filenames.</p>
+
+            <!-- Church Results -->
             <div class="result-set">
                 <h3>Church</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Church Green Displacement: 25,4 Red Displacement: 58,-4">
-                        <figcaption>Green Displacement: (25, 4), Red Displacement: (58, -4)</figcaption>
+                        <img src="media/sobel_without_cropping/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Church Without Cropping">
+                        <figcaption>Without Cropping</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_with_linear_autocontrast/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Church Linear Autocontrast">
+                        <figcaption>Linear Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_with_histogram_equalization_autocontrast/church_green_displacement_(24, -2)_red_displacement_(57, -4).jpg" alt="Church Histogram Equalization Autocontrast">
+                        <figcaption>Histogram Equalization Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_set_cropping_and_autocontrasting_clahe/church_green_displacement_(25, 4)_red_displacement_(59, -4).jpg" alt="Church CLAHE Autocontrast">
+                        <figcaption>CLAHE Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_and_automated_cropping_dynamic_threshold/church_green_displacement_(25, 4)_red_displacement_(58, -4).jpg" alt="Church Dynamic Threshold Cropping">
+                        <figcaption>Dynamic Threshold Cropping</figcaption>
                     </figure>
                 </div>
             </div>
 
+            <!-- Melons Results -->
             <div class="result-set">
                 <h3>Melons</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/melons_green_displacement_(87, 7)_red_displacement_(177, 12).jpg" alt="Melons Green Displacement: 87,7 Red Displacement: 177,12">
-                        <figcaption>Green Displacement: (87, 7), Red Displacement: (177, 12)</figcaption>
+                        <img src="media/sobel_without_cropping/melons_green_displacement_(87, 7)_red_displacement_(177, 12).jpg" alt="Melons Without Cropping">
+                        <figcaption>Without Cropping</figcaption>
                     </figure>
-                </div>
-            </div>
-
-            <div class="result-set">
-                <h3>Onion Church</h3>
-                <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/onion_church_green_displacement_(52, 24)_red_displacement_(107, 35).jpg" alt="Onion Church Green Displacement: 52,24 Red Displacement: 107,35">
-                        <figcaption>Green Displacement: (52, 24), Red Displacement: (107, 35)</figcaption>
+                        <img src="media/sobel_with_linear_autocontrast/melons_green_displacement_(87, 7)_red_displacement_(177, 12).jpg" alt="Melons Linear Autocontrast">
+                        <figcaption>Linear Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_with_histogram_equalization_autocontrast/melons_green_displacement_(80, 9)_red_displacement_(177, 13).jpg" alt="Melons Histogram Equalization Autocontrast">
+                        <figcaption>Histogram Equalization Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_set_cropping_and_autocontrasting_clahe/melons_green_displacement_(87, 6)_red_displacement_(177, 12).jpg" alt="Melons CLAHE Autocontrast">
+                        <figcaption>CLAHE Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_and_automated_cropping_dynamic_threshold/melons_green_displacement_(87, 7)_red_displacement_(177, 12).jpg" alt="Melons Dynamic Threshold Cropping">
+                        <figcaption>Dynamic Threshold Cropping</figcaption>
                     </figure>
                 </div>
             </div>
 
+            <!-- Emir Results -->
             <div class="result-set">
                 <h3>Emir</h3>
                 <div class="result-row">
                     <figure>
-                        <img src="media/sobel_without_cropping/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="Emir Green Displacement: 50,23 Red Displacement: 107,40">
-                        <figcaption>Green Displacement: (50, 23), Red Displacement: (107, 40)</figcaption>
+                        <img src="media/sobel_without_cropping/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="Emir Without Cropping">
+                        <figcaption>Without Cropping</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_with_linear_autocontrast/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="Emir Linear Autocontrast">
+                        <figcaption>Linear Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_with_histogram_equalization_autocontrast/emir_green_displacement_(50, 22)_red_displacement_(107, 40).jpg" alt="Emir Histogram Equalization Autocontrast">
+                        <figcaption>Histogram Equalization Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_set_cropping_and_autocontrasting_clahe/emir_green_displacement_(50, 22)_red_displacement_(107, 40).jpg" alt="Emir CLAHE Autocontrast">
+                        <figcaption>CLAHE Autocontrast</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/sobel_and_automated_cropping_dynamic_threshold/emir_green_displacement_(50, 23)_red_displacement_(107, 40).jpg" alt="Emir Dynamic Threshold Cropping">
+                        <figcaption>Dynamic Threshold Cropping</figcaption>
                     </figure>
                 </div>
             </div>
