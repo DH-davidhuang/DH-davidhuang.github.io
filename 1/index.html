@@ -46,74 +46,49 @@
         }
 
         figure img {
-            max-width: 100;
-            height: auto;
+            max-width: 150px; /* Adjust the image size */
+            height: auto;     /* Maintain aspect ratio */
             display: block;
-            margin: 0 auto;
+            margin: 0 auto;   /* Center the image */
         }
-    
+
+        .result-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .result-set {
+            margin-bottom: 20px;
+        }
+
+        .result-row {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        figure {
+            margin: 0;
+            text-align: center;
+        }
+
+        figure figcaption {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <h1>Project 1: Image Alignment and Colorization</h1>
 
-    <section>
-        <h2>Overview</h2>
-        <p>
-            This project implements methods to algorithmically colorize photos from Sergei Mikhailovich Prokudin-Gorskii (1863-1944) three channel collection.
-        </p>
-    </section>
+    <!-- Your existing content -->
 
-    <section>
-        <h2>Methods</h2>
-        <p>
-            The colorization process involves two steps: Image Alignment and Color Restoration. In the image alignment phase, we attempt to align the three channels as closely as possible by treating this as an optimization problem. The optimization is done using two key techniques: 
-            <strong>Sum of Squared Differences (SSD)</strong> and <strong>Normalized Cross-Correlation (NCC)</strong>.
-        </p>
-        <p>
-            SSD works by minimizing the error magnitude between two images, acting as a residual operator. NCC, on the other hand, works similarly to a dot product, aiming to find vectors that have the smallest angles between them. 
-        </p>
-
-        <h3>Optimization Functions: <code>argmax</code> and <code>min</code></h3>
-        <p>
-            In the alignment task, we optimize for the best displacement that aligns the color channels by either minimizing the SSD using <code>min</code> or maximizing the NCC using <code>argmax</code>. These functions help find the displacement that yields the best alignment score. For small images, we can perform an exhaustive search, but for larger images, we employ a pyramid search to recursively downscale the image and optimize over smaller regions.
-        </p>
-        <code>
-            def ncc_align(image1, image2, window_size):<br>
-                best_displacement = (0, 0)<br>
-                best_ncc = -float('inf')<br>
-                for x_displacement in range(-window_size, window_size+1):<br>
-                    for y_displacement in range(-window_size, window_size+1):<br>
-                        displacement = (x_displacement, y_displacement)<br>
-                        image1_shifted = np.roll(image1, displacement, axis=(0,1))<br>
-                        ncc = ssim(image1_shifted, image2, data_range=1.0)<br>
-                        if ncc > best_ncc:<br>
-                            best_ncc = ncc<br>
-                            best_displacement = displacement<br>
-                return best_displacement
-        </code>
-    </section>
-
-    <section>
-        <h2>Details and Techniques</h2>
-        <p>
-            In my implementation, I used the blue channel as the base image and aligned the red and green channels to it. I experimented with both SSD and NCC, and found that NCC provided better alignment results. For smaller images, I used a brute-force search over a displacement window, while for larger images, I implemented a pyramid search to reduce computation time.
-        </p>
-
-        <h3>Automatic Cropping</h3>
-        <p>
-            To clean up the images, I implemented an automatic cropping method that removes unnecessary white or black borders by detecting the edge between the border and the image content. The cropping is based on intensity thresholding and calculating the bounding box of the actual image content.
-        </p>
-
-        <h3>Automatic Contrast Adjustment</h3>
-        <p>
-            Additionally, I implemented an automatic contrast adjustment method to improve the visual quality of the image. This rescales the image intensity such that the darkest pixel is zero and the brightest pixel is one. This simple adjustment helps make the images more visually striking without any manual intervention.
-        </p>
-    </section>
     <section class="results">
         <h2>Results: Single-Scale Images</h2>
         <p>
-            Below are the results from single-scale images where I search a space of [-15, 15] window for both x and y image coordinates.
+            Below are the results from single-scale images, showing the baselines filtered by those that contain green and red displacement vectors in their filenames.
         </p>
         <div class="result-grid">
             <!-- monastery results -->
@@ -148,7 +123,7 @@
                     </figure>
                 </div>
             </div>
-        </div>DH-davidhuang.github.io/1/media/single-scale-small-images
+        </div>
     </section>
 
     <section class="results">
@@ -202,43 +177,6 @@
             </div>
         </div>
     </section>
-    
-    <style>
-        .result-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-    
-        .result-set {
-            margin-bottom: 20px;
-        }
-    
-        .result-row {
-            display: flex;
-            gap: 20px;
-            justify-content: flex-start;
-        }
-    
-        figure {
-            margin: 0;
-            text-align: center;
-        }
-    
-        figure img {
-            max-width: 100;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-    
-        figure figcaption {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
-        }
-    </style>
-    
 
     <section>
         <h2>Conclusion</h2>
