@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing Project Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .image-container img {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            max-width: 300px;
+            height: auto;
+        }
+        .sub-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Image Processing Project Results</h1>
+    <p>In this project, I implemented methods that:</p>
+    <ul>
+        <li>Run edge detection for images</li>
+        <li>Blur and sharpen images</li>
+        <li>Combine images by frequencies</li>
+        <li>Run multiresolution blending and image splining</li>
+    </ul>
+
+    <!-- Part 1: Fun with Filters -->
+    <div class="section">
+        <h2>Part 1: Fun with Filters</h2>
+        <p>For the first part, I applied edge detection using finite difference filters in both the x and y directions (dX and dY). The matrices used are as follows:</p>
+        <pre>
+        Dx = [1, -1]
+        Dy = [1,
+              -1]
+        </pre>
+        <p>The results are presented in order of dX, dY, gradient magnitude, and binarized gradient magnitude. The cutoff for binarizing the gradient magnitude was 0.3.</p>
+
+        <h3>Part 1.1: Finite Difference Operator Results</h3>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_dx.png" alt="Part 1.1 dX">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_dy.png" alt="Part 1.1 dY">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_gradient_magnitude.png" alt="Part 1.1 Gradient Magnitude">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_edge_map.png" alt="Part 1.1 Binarized Gradient Magnitude">
+        </div>
+
+        <h3>Part 1.2: Derivative of Gaussian (DoG) Filter Results</h3>
+        <p>After applying the Gaussian filter, the outputs were more smoothed out, and the binarized gradient magnitude became thicker due to the spreading effect of the Gaussian filter. The threshold for binarizing the gradient magnitude was 0.04.</p>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_dx.png" alt="Part 1.2 dX">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_dy.png" alt="Part 1.2 dY">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_gradient_magnitude.png" alt="Part 1.2 Gradient Magnitude">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_edge_map.png" alt="Part 1.2 Binarized Gradient Magnitude">
+        </div>
+    </div>
+
+    <!-- Part 2: Fun with Frequencies -->
+    <div class="section">
+        <h2>Part 2: Fun with Frequencies</h2>
+        
+        <!-- Part 2.1: Image Sharpening -->
+        <div class="sub-section">
+            <h3>Part 2.1: Image Sharpening</h3>
+            <p>In this section, I applied image sharpening using the unsharp masking technique. Below are the results of various sharpening parameters applied to the images:</p>
+            <div class="image-container">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_0.png" alt="Sharpened Image Alpha 0">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_1.png" alt="Sharpened Image Alpha 1">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_2.png" alt="Sharpened Image Alpha 2">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_3.png" alt="Sharpened Image Alpha 3">
+            </div>
+        </div>
+
+        <!-- Part 2.2: Hybrid Images -->
+        <div class="sub-section">
+            <h3>Part 2.2: Hybrid Images</h3>
+            <p>In this section, I created hybrid images by combining different frequency components of two images:</p>
+            <div class="image-container">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/DerekPicture.jpg" alt="Derek Picture">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/nutmeg.jpg" alt="Nutmeg Picture">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/hybrid_image_original.png" alt="Hybrid Image">
+            </div>
+            <p>Below are images of Tom Holland and Andrew Garfield, along with their Fourier transforms and hybrid images:</p>
+            <div class="image-container">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/tomholland.jpg" alt="Tom Holland">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/andrew_garfield.jpg" alt="Andrew Garfield">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/tomholland_fourier.png" alt="Tom Holland Fourier Transform">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/andrew_garfield_fourier.png" alt="Andrew Garfield Fourier Transform">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/spiderman_hybrid_image.png" alt="Spiderman Hybrid Image">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/color_spiderman_fourier_hybrid_image.png" alt="Color Spiderman Hybrid Fourier Image">
+            </div>
+        </div>
+
+        <!-- Part 2.3: Multiresolution Blending - Oranges -->
+        <div class="sub-section">
+            <h3>Part 2.3: Multiresolution Blending - Oranges</h3>
+            <p>Below are images demonstrating Gaussian and Laplacian stacks applied to the orange:</p>
+            <div class="image-container">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/guassian_0.png" alt="Gaussian Level 0">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/guassian_1.png" alt="Gaussian Level 1">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/laplacian_0.png" alt="Laplacian Level 0">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/normalized_laplacian_0.png" alt="Normalized Laplacian Level 0">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/orple.jpg" alt="Orple Image">
+            </div>
+        </div>
+
+        <!-- Part 2.4: Multiresolution Blending - Image Spline -->
+        <div class="sub-section">
+            <h3>Part 2.4: Multiresolution Blending - Image Spline</h3>
+            <p>Finally, the multiresolution blending was applied to different sets of images. Below are the results:</p>
+            <div class="image-container">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part2_4_images/orple_blended_image.png" alt="Orple Blended Image">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/superman.jpg" alt="Superman">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/bruce_wayne.jpg" alt="Bruce Wayne">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part2_4_images/batman_vs_spiderman_blended_image.png" alt="Batman vs Spiderman Blended Image">
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
