@@ -41,96 +41,216 @@
         <li>Run multiresolution blending and image splining</li>
     </ul>
 
-    <!-- Part 1: Fun with Filters -->
     <div class="section">
         <h2>Part 1: Fun with Filters</h2>
         <p>For the first part, I applied edge detection using finite difference filters in both the x and y directions (dX and dY). The matrices used are as follows:</p>
         <pre>
         Dx = [1, -1]
-        Dy = [1,
-              -1]
+        Dy = [[1, 0]
+              [0, -1]]
         </pre>
         <p>The results are presented in order of dX, dY, gradient magnitude, and binarized gradient magnitude. The cutoff for binarizing the gradient magnitude was 0.3.</p>
 
         <h3>Part 1.1: Finite Difference Operator Results</h3>
         <div class="image-container">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_dx.png" alt="Part 1.1 dX">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_dy.png" alt="Part 1.1 dY">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_gradient_magnitude.png" alt="Part 1.1 Gradient Magnitude">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.1_edge_map.png" alt="Part 1.1 Binarized Gradient Magnitude">
+            <img src="media/part_1_images/1.1_dx.png" alt="Part 1.1 dX">
+            <img src="media/part_1_images/1.1_dy.png" alt="Part 1.1 dY">
+            <img src="media/part_1_images/1.1_gradient_magnitude.png" alt="Part 1.1 Gradient Magnitude">
+            <img src="media/part_1_images/1.1_edge_map.png" alt="Part 1.1 Binarized Gradient Magnitude">
         </div>
 
-        <h3>Part 1.2: Derivative of Gaussian (DoG) Filter Results</h3>
-        <p>After applying the Gaussian filter, the outputs were more smoothed out, and the binarized gradient magnitude became thicker due to the spreading effect of the Gaussian filter. The threshold for binarizing the gradient magnitude was 0.04.</p>
-        <div class="image-container">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_dx.png" alt="Part 1.2 dX">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_dy.png" alt="Part 1.2 dY">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_gradient_magnitude.png" alt="Part 1.2 Gradient Magnitude">
-            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_1_images/1.2_edge_map.png" alt="Part 1.2 Binarized Gradient Magnitude">
+        <div class="section">
+            <h3>Part 1.2: Derivative of Gaussian (DoG) Filter Results</h3>
+            <p>After applying the Gaussian filter, the outputs were more smoothed out, and the binarized gradient magnitude became thicker due to the spreading effect of the Gaussian filter. The threshold for binarizing the gradient magnitude was 0.3.</p>
+            <p>Below are the results after applying the Gaussian filter, and it was confirmed that these outputs are the same exact results pixel-wise as when using vanilla Gaussian convolution.</p>
+            
+            <div class="image-container">
+                <img src="media/part_1_images/1.2_dx.png" alt="Part 1.2 dX">
+                <img src="media/part_1_images/1.2_dy.png" alt="Part 1.2 dY">
+                <img src="media/part_1_images/1.2_gradient_magnitude.png" alt="Part 1.2 Gradient Magnitude">
+                <img src="media/part_1_images/1.2_edge_map.png" alt="Part 1.2 Binarized Gradient Magnitude">
+            </div>
+        
+            <p>Here are the vanilla versions of the Gaussian convolution applied to the image. The results are confirmed to be identical pixel-wise to the results shown above:</p>
+        
+            <div class="image-container">
+                <img src="media/part_1_images/1.2_vanilla_dx.png" alt="Part 1.2 Vanilla dX">
+                <img src="media/part_1_images/1.2_vanilla_dy.png" alt="Part 1.2 Vanilla dY">
+                <img src="media/part_1_images/1.2_vanilla_gradient_magnitude.png" alt="Part 1.2 Vanilla Gradient Magnitude">
+                <img src="media/part_1_images/1.2_edge_map_vanilla_w_guassian_filter.png" alt="Part 1.2 Vanilla Binarized Gradient Magnitude">
+            </div>
         </div>
     </div>
 
-    <!-- Part 2: Fun with Frequencies -->
-    <div class="section">
-        <h2>Part 2: Fun with Frequencies</h2>
+        <div class="section">
+            <h2>Part 2: Fun with Frequencies</h2>
+            
+            <div class="sub-section">
+                <h3>Part 2.1: Image Sharpening</h3>
+                <p>In this section, I applied image sharpening using the unsharp masking technique. Below is the equation used for sharpening the image:</p>
+                <pre>
+                f_sharp = f + α(f - f * g) = f * ((1 + α)e - αg)
+                </pre>
+                <p>
+                    By adjusting the parameter α, we can control how much sharpening is applied. The results for α = 0 (no sharpening), α = 1, α = 2, and α = 5 are shown below.
+                </p>
+
+                <div class="image-container">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_0.png" alt="Sharpened Image Alpha 0">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_1.png" alt="Sharpened Image Alpha 1">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_2.png" alt="Sharpened Image Alpha 2">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_5.png" alt="Sharpened Image Alpha 5">
+                </div>
+
+                <h4>Sharpening Results for Different Scenes:</h4>
+                <p>Below are additional sharpening results for three different scenes: Singapore vibrant, Paris Versailles, and a fast-paced image. Each row shows the results with α = 0, α = 1, α = 2, and α = 5 for the same scene.</p>
+
+                <div class="image-container">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_0_singapore_vibrant_image.png" alt="Singapore Vibrant (Alpha 0)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_1_singapore_vibrant_image.png" alt="Singapore Vibrant (Alpha 1)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_2_singapore_vibrant_image.png" alt="Singapore Vibrant (Alpha 2)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_5_singapore_vibrant_image.png" alt="Singapore Vibrant (Alpha 5)">
+                </div>
+
+                <div class="image-container">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_0_paris_versailles_image.png" alt="Paris Versailles (Alpha 0)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_1_paris_versailles_image.png" alt="Paris Versailles (Alpha 1)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_2_paris_versailles_image.png" alt="Paris Versailles (Alpha 2)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_5_paris_versailles_image.png" alt="Paris Versailles (Alpha 5)">
+                </div>
+
+                <div class="image-container">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_0_fast_paced_image.png" alt="Fast Paced Image (Alpha 0)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_1_fast_paced_image.png" alt="Fast Paced Image (Alpha 1)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_2_fast_paced_image.png" alt="Fast Paced Image (Alpha 2)">
+                    <img src="media/part_2.1/2.1_sharp_image_alpha_5_fast_paced_image.png" alt="Fast Paced Image (Alpha 5)">
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h3>Blurring and Sharpening Paris Versailles Image</h3>
+            <p>
+                The following results demonstrate first applying a Gaussian blur to the Paris Versailles image and then sharpening it. This technique enhances edges and details that were softened by the blur. The images below show the results for different values of α: 0, 3, and 5.
+            </p>
         
-        <!-- Part 2.1: Image Sharpening -->
-        <div class="sub-section">
-            <h3>Part 2.1: Image Sharpening</h3>
-            <p>In this section, I applied image sharpening using the unsharp masking technique. Below are the results of various sharpening parameters applied to the images:</p>
             <div class="image-container">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_0.png" alt="Sharpened Image Alpha 0">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_1.png" alt="Sharpened Image Alpha 1">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_2.png" alt="Sharpened Image Alpha 2">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.1/2.1_sharp_image_alpha_3.png" alt="Sharpened Image Alpha 3">
+                <img src="media/part_2.1/2.1_sharp_image_alpha_0_blurred_first_paris_versailles_image.png" alt="Blurred and Sharpened Paris Versailles Image (Alpha 0)">
+                <img src="media/part_2.1/2.1_sharp_image_alpha_3_blurred_first_paris_versailles_image.png" alt="Blurred and Sharpened Paris Versailles Image (Alpha 3)">
+                <img src="media/part_2.1/2.1_sharp_image_alpha_5_blurred_first_paris_versailles_image.png" alt="Blurred and Sharpened Paris Versailles Image (Alpha 5)">
             </div>
         </div>
 
-        <!-- Part 2.2: Hybrid Images -->
+
         <div class="sub-section">
             <h3>Part 2.2: Hybrid Images</h3>
             <p>In this section, I created hybrid images by combining different frequency components of two images:</p>
+
+            <h4>Derek Hoiem and Nutmeg</h4>
             <div class="image-container">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/DerekPicture.jpg" alt="Derek Picture">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/nutmeg.jpg" alt="Nutmeg Picture">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/hybrid_image_original.png" alt="Hybrid Image">
+                <img src="media/hybrid_images_all_part2_2/DerekPicture.jpg" alt="Derek Picture">
+                <img src="media/hybrid_images_all_part2_2/nutmeg.jpg" alt="Nutmeg Picture">
+                <img src="media/hybrid_images_all_part2_2/hybrid_image_original.png" alt="Hybrid Image of Derek and Nutmeg">
             </div>
-            <p>Below are images of Tom Holland and Andrew Garfield, along with their Fourier transforms and hybrid images:</p>
+
+            <h4>Spidermen: Tom Holland and Andrew Garfield</h4>
+            <p>
+                Below are images of Tom Holland and Andrew Garfield, along with their Fourier transforms and the resulting hybrid images. I particularly enjoyed creating this hybrid, as it turned out to be a favorite among my roommates, who thought it looked really cool. Tom Holland is passed through a high frequency pass filter while Andrew Garfield's rendition of spiderman is passed through a low pass filter instead.
+            </p>
             <div class="image-container">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/tomholland.jpg" alt="Tom Holland">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/andrew_garfield.jpg" alt="Andrew Garfield">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/tomholland_fourier.png" alt="Tom Holland Fourier Transform">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/andrew_garfield_fourier.png" alt="Andrew Garfield Fourier Transform">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/spiderman_hybrid_image.png" alt="Spiderman Hybrid Image">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/color_spiderman_fourier_hybrid_image.png" alt="Color Spiderman Hybrid Fourier Image">
+                <img src="media/hybrid_images_all_part2_2/tomholland.jpg" alt="Tom Holland">
+                <img src="media/hybrid_images_all_part2_2/andrew_garfield.jpg" alt="Andrew Garfield">
+                <img src="media/hybrid_images_all_part2_2/tomholland_fourier.png" alt="Tom Holland Fourier Transform">
+                <img src="media/hybrid_images_all_part2_2/andrew_garfield_fourier.png" alt="Andrew Garfield Fourier Transform">
+                <img src="media/hybrid_images_all_part2_2/spiderman_hybrid_image.png" alt="Spiderman Hybrid Image">
+                <img src="media/hybrid_images_all_part2_2/color_spiderman_fourier_hybrid_image.png" alt="Color Spiderman Hybrid Fourier Image">
+            </div>
+            <p>
+                Additionally, here is the Fourier transform of combining both Spidermen together, represented by the following hybrid image:
+            </p>
+            <div class="image-container">
+                <img src="media/hybrid_images_all_part2_2/hybrid_image.png" alt="Fourier Hybrid Image of Spidermen">
+            </div>
+
+            <h4>Superman and Bruce Wayne</h4>
+            <p>Finally, below are the hybrid results from combining Superman and Bruce Wayne:</p>
+            <div class="image-container">
+                <img src="media/hybrid_images_all_part2_2/bruce_wayne.jpg" alt="Bruce Wayne">
+                <img src="media/hybrid_images_all_part2_2/superman.jpg" alt="Superman">
+                <img src="media/hybrid_images_all_part2_2/another_run_superman_hybrid_image.png" alt="Superman and Bruce Wayne Hybrid Image">
             </div>
         </div>
 
-        <!-- Part 2.3: Multiresolution Blending - Oranges -->
         <div class="sub-section">
-            <h3>Part 2.3: Multiresolution Blending - Oranges</h3>
-            <p>Below are images demonstrating Gaussian and Laplacian stacks applied to the orange:</p>
+            <h3>Part 2.3: Multiresolution Blending - Oranges and Apples</h3>
+            <p>Below are images demonstrating Gaussian and normalized Laplacian stacks applied to both oranges and apples:</p>
+
+            <h4>Gaussian Stack Levels - Oranges</h4>
             <div class="image-container">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/guassian_0.png" alt="Gaussian Level 0">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/guassian_1.png" alt="Gaussian Level 1">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/laplacian_0.png" alt="Laplacian Level 0">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/normalized_laplacian_0.png" alt="Normalized Laplacian Level 0">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part_2.3 images/orple.jpg" alt="Orple Image">
+                <img src="media/part_2.3 images/orange_guassian_0.png" alt="Orange Gaussian Level 0">
+                <img src="media/part_2.3 images/orange_guassian_1.png" alt="Orange Gaussian Level 1">
+                <img src="media/part_2.3 images/orange_guassian_2.png" alt="Orange Gaussian Level 2">
+                <img src="media/part_2.3 images/orange_guassian_3.png" alt="Orange Gaussian Level 3">
+                <img src="media/part_2.3 images/orange_guassian_4.png" alt="Orange Gaussian Level 4">
+            </div>
+
+            <h4>Normalized Laplacian Stack Levels - Oranges</h4>
+            <div class="image-container">
+                <img src="media/part_2.3 images/orange_normalized_laplacian_0.png" alt="Orange Normalized Laplacian Level 0">
+                <img src="media/part_2.3 images/orange_normalized_laplacian_1.png" alt="Orange Normalized Laplacian Level 1">
+                <img src="media/part_2.3 images/orange_normalized_laplacian_2.png" alt="Orange Normalized Laplacian Level 2">
+                <img src="media/part_2.3 images/orange_normalized_laplacian_3.png" alt="Orange Normalized Laplacian Level 3">
+                <img src="media/part_2.3 images/orange_normalized_laplacian_4.png" alt="Orange Normalized Laplacian Level 4">
+            </div>
+
+            <h4>Gaussian Stack Levels - Apples</h4>
+            <div class="image-container">
+                <img src="media/part_2.3 images/guassian_0.png" alt="Apple Gaussian Level 0">
+                <img src="media/part_2.3 images/guassian_1.png" alt="Apple Gaussian Level 1">
+                <img src="media/part_2.3 images/guassian_2.png" alt="Apple Gaussian Level 2">
+                <img src="media/part_2.3 images/guassian_3.png" alt="Apple Gaussian Level 3">
+                <img src="media/part_2.3 images/guassian_4.png" alt="Apple Gaussian Level 4">
+            </div>
+
+            <h4>Normalized Laplacian Stack Levels - Apples</h4>
+            <div class="image-container">
+                <img src="media/part_2.3 images/normalized_laplacian_0.png" alt="Apple Normalized Laplacian Level 0">
+                <img src="media/part_2.3 images/normalized_laplacian_1.png" alt="Apple Normalized Laplacian Level 1">
+                <img src="media/part_2.3 images/normalized_laplacian_2.png" alt="Apple Normalized Laplacian Level 2">
+                <img src="media/part_2.3 images/normalized_laplacian_3.png" alt="Apple Normalized Laplacian Level 3">
+                <img src="media/part_2.3 images/normalized_laplacian_4.png" alt="Apple Normalized Laplacian Level 4">
+            </div>
+
+            <h4>Final Blended Image</h4>
+            <div class="image-container">
+                <img src="media/part_2.3 images/orple.jpg" alt="Orple Image">
             </div>
         </div>
+
 
         <!-- Part 2.4: Multiresolution Blending - Image Spline -->
         <div class="sub-section">
             <h3>Part 2.4: Multiresolution Blending - Image Spline</h3>
-            <p>Finally, the multiresolution blending was applied to different sets of images. Below are the results:</p>
+            <p>Finally, the multiresolution blending was applied to different sets of images. Below are the original images alongside their blended results along with different horizontal, vertical, gradient based masks. I also tried a segmenation model but results were less successful:</p>
+
+            <!-- Displaying original and blended images in a row -->
             <div class="image-container">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part2_4_images/orple_blended_image.png" alt="Orple Blended Image">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/superman.jpg" alt="Superman">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/hybrid_images_all_part2_2/bruce_wayne.jpg" alt="Bruce Wayne">
-                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/2/media/part2_4_images/batman_vs_spiderman_blended_image.png" alt="Batman vs Spiderman Blended Image">
+                <!-- Orple Image Blend -->
+                <img src="media/part2_4_images/northern_lights.jpg" alt="Northern Lights">
+
+                <!-- Ocean Image Blend -->
+                <img src="media/part2_4_images/ocean_views.jpg" alt="Ocean Views">
+                <img src="media/part2_4_images/ocean_blended_image.png" alt="Ocean Blended Image">
+
+                <!-- Sahara Desert Image Blend -->
+                <img src="media/part2_4_images/sahara_desert.jpg" alt="Sahara Desert">
+                <img src="media/part2_4_images/sahara_blended_image.png" alt="Sahara Blended Image">
+
+                <!-- Batman vs Spiderman Blend -->
+                <img src="media/hybrid_images_all_part2_2/superman.jpg" alt="Superman">
+                <img src="media/hybrid_images_all_part2_2/bruce_wayne.jpg" alt="Bruce Wayne">
+                <img src="media/part2_4_images/batman_vs_spiderman_blended_image.png" alt="Batman vs Spiderman Blended Image">
             </div>
         </div>
-    </div>
 
 </body>
 </html>
