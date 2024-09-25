@@ -49,6 +49,9 @@
               [0, -1]]
         </pre>
         <p>The results are presented in order of dX, dY, gradient magnitude, and binarized gradient magnitude. The cutoff for binarizing the gradient magnitude was 0.3.</p>
+        <p>First, calculate the partial derivatives in both the x and y directions of the cameraman image by convolving the image with finite difference operators, <i>D<sub>x</sub></i> and <i>D<sub>y</sub></i>. This can be done using <code>convolve2d</code> from the <code>scipy.signal</code> library. Once the partial derivatives are computed, combine them to generate the gradient magnitude image using the following formula:</p>
+
+        <p><code>Gradient Magnitude = sqrt(D<sub>x</sub><sup>2</sup> + D<sub>y</sub><sup>2</sup>)</code></p>
 
         <h3>Part 1.1: Finite Difference Operator Results</h3>
         <div class="image-container">
@@ -253,7 +256,7 @@
             </div>
 
             <!-- Bells and Whistles Section -->
-            <p>In addition to the requested tasks, I also implemented the Bells and Whistles extra credit by creating color-based Gaussian/Laplacian stacks and hybrid images as outlined in the project.</p>
+            <p>In addition to completing the required tasks, I also took on the Bells and Whistles extra credit by implementing color-based Gaussian/Laplacian stacks and hybrid images as described in the project. I found it really enjoyable to learn these techniques, which I typically associate with video and photo editing!</p>
         </div>
 
 
