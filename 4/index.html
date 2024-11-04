@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Warping and Mosaicing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+        }
+        section {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .image-container img {
+            width: 48%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .equation-container {
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Part A: Image Warping and Mosaicing</h1>
+        <p>An exploration of image transformation and homography recovery</p>
+    </header>
+    
+    <section>
+        <h2>Taking Images</h2>
+        <p>Below are some images used in this project for the image rectification task:</p>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/gon_1.jpg" alt="Gon Image">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/rsf_image_rectify-2.jpg" alt="RSF Picture">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/rsf_locker_1.jpg" alt="RSF Locker">
+        </div>
+    </section>
+
+    <section>
+        <h2>Recovering Homographies</h2>
+        <p>Before warping images into alignment, we need to recover the parameters of the transformation between each pair of images. In our case, this transformation is a homography, represented by the equation:</p>
+        <div class="equation-container">
+            p' = H * p
+        </div>
+        <p>Here, <strong>H</strong> is a 3x3 matrix with 8 degrees of freedom (the lower-right corner is a scaling factor and can be set to 1). We can recover the homography by establishing a set of (p’, p) pairs of corresponding points from two images.</p>
+        
+        <p>The function structure used for homography recovery:</p>
+        <div class="equation-container">
+            H = computeH(im1_pts, im2_pts)
+        </div>
+        <p>In this function, <code>im1_pts</code> and <code>im2_pts</code> are n-by-2 matrices holding the (x, y) coordinates of <code>n</code> point correspondences from the two images, and <code>H</code> is the 3x3 homography matrix. Setting up a matrix equation, <strong>Ah = b</strong>, allows us to solve for the entries in <code>H</code>. This process requires more than 4 points to create an overdetermined system, which can be solved using least-squares to improve stability and accuracy.</p>
+    </section>
+
+    <section>
+        <h3>System of Equations for Homography Recovery</h3>
+        <p>We can set up the system of equations as follows (cited from <a href="https://inst.eecs.berkeley.edu/~cs180/fa23/upload/files/proj4B/alec.li/">CS180 Project 4B</a>):</p>
+        <div class="equation-container">
+            [x1, y1, 1, 0, 0, 0, -x'1*x1, -x'1*y1] * [h1 h2 h3 h4 h5 h6 h7 h8]^T = x'1
+            [0, 0, 0, x1, y1, 1, -y'1*x1, -y'1*y1] * [h1 h2 h3 h4 h5 h6 h7 h8]^T = y'1
+            ...
+        </div>
+        <p>Once the coefficients <code>h_i</code> are computed, the homography matrix can be constructed as:</p>
+        <div class="equation-container">
+            H = [h1 h2 h3]
+                [h4 h5 h6]
+                [h7 h8  1]
+        </div>
+    </section>
+
+    <section>
+        <h3>Computing Coordinate Warps</h3>
+        <p>With the homography matrix <code>H</code>, we can compute coordinate warps in homogeneous coordinates by multiplying <code>H</code> with the original coordinates and then scaling:</p>
+        <div class="equation-container">
+            [x']   = H * [x]
+            [y']     [y]
+            [w]      [1]
+        </div>
+        <p>This results in transformed coordinates:</p>
+        <div class="equation-container">
+            x' = x' / w
+            y' = y' / w
+        </div>
+    </section>
+
+    <section>
+        <h2>Warping the Images</h2>
+        <p>Now that we know the parameters of the homography, we can use this matrix to warp each image towards a reference image. The function structure for this operation is:</p>
+        <div class="equation-container">
+            imwarped = warpImage(im, H)
+        </div>
+        <p>In this process, <code>im</code> is the input image to be warped, and <code>H</code> is the homography matrix. The warping can be done using either forward or inverse mapping. I used inverse mapping to trace the coordinates of the output image back to the original image, applying linear interpolation to fill in the new image plane.</p>
+        <p>One important aspect is determining the size of the resulting image. I predicted the bounding box coordinates by transforming the four corners of the input image using <code>H</code>. 
+    </section>
+
+    <section>
+        <h2>Image Rectification</h2>
+        <p>With the homography and warping code in place, I then tested them all together by performing “rectification” on an image. This essentially just process re-projects an image to make known rectangular objects (like paintings or tiles) appear straightened and aligned. This results below help verify our techniques to ensure we are getting accurate/decent enough estimations. </p>
+        
+        <h3>Warping Images for Rectification</h3>
+        <p>Once we have estimated the homography matrix, we can use it to re-project one image onto the plane of another for stitching. For instance, to project Image 1 onto Image 2, we perform an inverse warp to achieve a smooth reprojection.</p>
+        
+        <p>This involves transforming the four corners of Image 1 using the homography matrix to map them onto Image 2, defining the bounding box where the re-projected image will be placed. The next step is to interpolate the pixel values of Image 1 to align accurately within this bounding box. Using <code>scipy.interpolate.RegularGridInterpolator</code>, we interpolate the pixels of Image 1 and place the interpolated values at corresponding locations in the final image.</p>
+        
+        <p>For cases involving multiple images without direct homographies between each pair, transformations can be calculated by chaining homographies. For example, if there is a homography from Image A to Image B and another from Image B to Image C, the homography from Image A to Image C can be obtained by multiplying the two matrices. </p>
+        
+        <p>For my examples, I basically just selected the four corners of a rectangular object as points in <code>im1_pts</code> and define <code>im2_pts</code> as a perfect square, such as some scaled version of these coordinates <code>[0, 0; 0, 1; 1, 0; 1, 1]</code>.</p>
+        
+        <p>Results:</p>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/image_rectification/frontal_rsf_entrance.jpg" alt="Frontal RSF Entrance">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/image_rectification/gon_rectified.jpg" alt="Gon Rectified">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/image_rectification/rsf_rectified.jpg" alt="RSF Rectified">
+        </div>
+        <p>Directory containing rectified images:</p>
+        <div class="equation-container">
+            /Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/image_rectification
+        </div>
+    </section>
+
+    <section>
+        <h2>Blend the Images into a Mosaic</h2>
+        <p>To create a seamless mosaic, the images must be registered and blended together. Rather than overlaying one image directly onto another, which can cause strong edge artifacts, a weighted averaging technique is used. I selected one image as the reference and warped the other to align with the reference plane.</p>
+                    
+        <p>Each pixel in the region of an image is assigned a weight based on its Euclidean distance to the nearest edge using a distance transform. This distance is normalized from 0 to 1, serving as a blending weight. For improved results, a 4-level Laplacian pyramid was applied to handle different frequency bands. High-frequency details are blended based on the maximum distance transform values, while low-frequency details are combined using a weighted linear blend.</p>
+                    
+        <h3>Pre-Mosaic Images</h3>
+        <p>The following images were used as inputs for the mosaicing process:</p>
+        <div class="image-container">
+            <div>
+                <h4>RSF Locker Mosaic</h4>
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/rsf_locker_2.jpg" alt="RSF Locker 2">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/rsf_locker_3.jpg" alt="RSF Locker 3">
+            </div>
+            <div>
+                <h4>Tower Mosaic</h4>
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/tower_3.jpg" alt="Tower 3">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/tower_4.jpg" alt="Tower 4">
+            </div>
+            <div>
+                <h4>Campus Mosaic</h4>
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/campus_2.jpg" alt="Campus 2">
+                <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/campus_3.jpg" alt="Campus 3">
+            </div>
+        </div>
+    
+        <h3>Mosaic Results</h3>
+        <p>Below are the final results of the mosaicing process using the blending techniques described:</p>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/finalmosiac/rsf_locker_blended.jpg" alt="RSF Locker Blended">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/finalmosiac/tower_blended.jpg" alt="Tower Blended">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/finalmosiac/final_campus_blended.jpg" alt="Final Campus Blended">
+        </div>
+        
+        <p>Directory containing final mosaic images:</p>
+        <div class="equation-container">
+            /Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/project4a/finalmosiac
+        </div>
+    </section>
+    
+
+    <p>It was exciting to see how basic linear algebra could lead to powerful methods like homography estimation, where a simple change of basis allows us to align images to a common plane. This not only enables seamless warping but also sets the stage for blending techniques that leverage low- and high-frequency components to create a cohesive, stunning final mosaic.</p>
+
+    <section>
+        <h2>Detecting Corner Features in an Image</h2>
+        <p>Here are the results of running the Harris corner detector on a sample image from just using the code provided in harris.py! Thank you! . The process transforms the black-and-white version of the image, assigning a "corner strength" value to each pixel. Pixels with a high corner strength compared to their immediate neighbors are identified as potential corner points. This produces many a lot and I mean a lot of pretty redundant (not much information obtained) candidates.</p>
+        
+        <h3>Harris Interest Points Overlay</h3>
+        <p>The image below shows the original image overlaid with Harris interest points detected in areas with high corner strength:</p>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/base_photos/campus_2.jpg" alt="Original Image">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/harris_corners_campus_2.png" alt="Harris Corner Overlay">
+        </div>
+    </section>
+    <section>
+        <h2>Adaptive Non-Maximal Suppression</h2>
+        <p>In the previous Harris corner detection, there were way too many candidate points to be meaningful. To address this, I followed instructions and simply applied the Adaptive Non-Maximal Suppression (ANMS) that was outlined in the following paper staff shared:https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf. This was done to filter out redundant keypoints, retaining only the strongest corners that are evenly spaced across the image. This made a big difference as it helped to reduce overlap and also ensured that selected points represent significant, well-distributed features at least that's the idea!</p>
+        
+        <h3>Before and After Applying ANMS</h3>
+        <p>The images below show a comparison of detected corners before and after applying ANMS:</p>
+        <div class="image-container">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/harris_corners_campus_2.png" alt="Harris Corners Before ANMS">
+            <img src="/Users/davidhuang/Downloads/cs180/DH-davidhuang.github.io/4/media/anms_harris_corners_campus_2.jpg" alt="Harris Corners After ANMS">
+        </div>
+    </section>
+    
+    <section>
+        <h2>Feature Descriptor Extraction</h2>
+        <p>For feature descriptor extraction, I implemented axis-aligned 8x8 patches sampled from a larger 40x40 window around each keypoint. This approach was done to try and help ensure that we were able to get a sufficiently blurred descriptor for each feature point. I applied bias and gain normalization to standardize the descriptors for comparison. Note that rotation invariance and wavelet transforms were not applied in this implementation, focusing on the axis-aligned descriptor extraction.</p>
+    
+        <h3>Example Feature Descriptors</h3>
+        <p>Below are examples of extracted feature descriptors:</p>
+        <div class="image-container">
+            <img src="/path/to/placeholder1.png" alt="Feature Descriptor Example 1">
+            <img src="/path/to/placeholder2.png" alt="Feature Descriptor Example 2">
+            <img src="/path/to/placeholder3.png" alt="Feature Descriptor Example 3">
+            <img src="/path/to/placeholder4.png" alt="Feature Descriptor Example 4">
+        </div>
+    </section>
+
+    <section>
+        <h2>Feature Matching</h2>
+        <p>Once features are extracted from both images, the next step was to establish correspondences by matching features between them. For efficient matching, we use k-d trees to perform quick nearest-neighbor searches, where each feature in the first image is compared to potential matches in the second image. To ensure robust matches, a cross-check is applied, where a feature from the first image must have its best match in the second image, and vice versa. This bidirectional validation helps eliminate mismatches.</p>
+        
+        <p>To further refine matches and minimize outliers, we apply a ratio test, inspired by Lowe’s method. By examining the ratio between the closest and second-closest matches for each feature, we can filter out ambiguous matches. Ideally, the closest match should be significantly stronger than the second-closest if it represents a true correspondence. This additional thresholding step enhances the reliability of our matching process.</p>
+        
+        <h3>Feature Matching Results</h3>
+        <p>The image below illustrates the results of feature matching on ANMS-selected points. Harris interest points are marked in blue, while ANMS-selected points are in red.</p>
+        <div class="image-container">
+            <img src="/path/to/feature_matching_example.png" alt="Feature Matching Illustration">
+        </div>
+    </section>
+    <section>
+        <h2>RANSAC for Robust Homography Estimation</h2>
+        <p>Yet even with Lowe's ratio test reducing outliers in feature matching, some incorrect correspondences still nonetheless remain, which can heavily influence the homography estimation calculation as a result of this "noise."" This is because the least-squares optimization is actually (without regularization) pretty sensitive to outliers, as it basically returns a safe "expectation" of the training data it can see. In fact there is some theory such as the James-Stein estimator that shows how shrinkage can help lead to a better general estimator when we have some conditions being met such as the data point being 3 or more parameters. a single mismatched pair can distort the result significantly. To address this, we use RANSAC (Random Sample Consensus) to improve robustness.</p>
+        
+        <p>In RANSAC, we randomly sample four pairs of matched points and compute the homography based on these samples. We then evaluate how well this homography aligns other correspondences, counting the number of "inliers"—points that fit the homography within a defined error threshold. This process is repeated multiple times, and the homography with the highest number of inliers is selected as the best estimate. By prioritizing the consensus among inliers, RANSAC minimizes the impact of outliers and yields a more reliable homography.</p>
+        
+        <h3>RANSAC Results</h3>
+        <p>The image below shows the effect of RANSAC on the matched features, with cross-checking disabled to highlight RANSAC’s impact on filtering outliers.</p>
+        <div class="image-container">
+            <img src="/path/to/ransac_results.png" alt="RANSAC Results Illustration">
+        </div>
+    </section>
+    
+    <section>
+        <h2>Final Results</h2>
+        <p>The following images help demonstrate the outcome of the full feature detection, matching, and homography estimation pipeline. The final mosaic is built by blending transformed images using the robust homographies obtained through RANSAC, resulting in a cohesive and accurate alignment of the image set.</p>
+        <div class="image-container">
+            <img src="/path/to/final_result_1.png" alt="Final Result 1">
+            <img src="/path/to/final_result_2.png" alt="Final Result 2">
+            <img src="/path/to/final_result_3.png" alt="Final Result 3">
+        </div>
+    </section>
+
+
+
+    
+</body>
+</html>
+
