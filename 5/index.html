@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 5: Diffusion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #0078D7;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-container img {
+            max-width: 45%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .image-container figure {
+            margin: 0;
+            text-align: center;
+        }
+        .image-container figcaption {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h2>Part A: The Power of Diffusion Models!</h2>
+        <p>Part A is an introductory exploration of diffusion models, focusing on their potential for generating and manipulating images. This section aims to familiarize you with the basics of diffusion models through tasks like implementing sampling loops, inpainting, and creating optical illusions. You will use the pretrained DeepFloyd IF model to complete these tasks and visualize your results.</p>
+        <h3>Overview</h3>
+        <p>Diffusion models are trained to reverse the process of progressively adding noise to an image. Starting with a clean image, noise is incrementally added until it becomes indistinguishable from pure noise. The diffusion model takes this noisy image at a given timestep and predicts the noise to reconstruct the original image.</p>
+        <p>DeepFloyd is a powerful two-stage text-to-image diffusion model, capable of generating high-quality images. In this part, you will use pretrained models to explore how diffusion works, implement sampling loops, and test its performance on various tasks.</p>
+        <h3>Deliverables</h3>
+        <ul>
+            <li>For the provided text prompts, display captions alongside the generated images, reflecting on their quality and relationship to the prompts.</li>
+            <li>Implement a forward process to add noise to a test image and visualize the results at different noise levels.</li>
+            <li>Experiment with classical denoising methods like Gaussian blur to compare their performance against diffusion models.</li>
+            <li>Use a pretrained diffusion model to perform one-step denoising and evaluate its accuracy in reconstructing images.</li>
+        </ul>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Test Image with Various Noise Levels</h4>
+            <figure>
+                <img src="media/parta_part1/test_image_at_various_noise_part1.png" alt="Test Image at Various Noise Levels">
+                <figcaption>Progressively noisy test image at timesteps t = [250, 500, 750]</figcaption>
+            </figure>
+            <h4>Gaussian Denoising</h4>
+            <figure>
+                <img src="media/parta_part1/guassian_denoised.png" alt="Gaussian Denoising Results">
+                <figcaption>Gaussian-denoised images for t = [250, 500, 750]</figcaption>
+            </figure>
+            <h4>One-Step Denoising</h4>
+            <figure>
+                <img src="media/parta_part1/one_step_denoising_all.png" alt="One-Step Denoising Results">
+                <figcaption>Original, noisy, and denoised images using a pretrained diffusion model</figcaption>
+            </figure>
+        </div>
+    </section>
+    <section>
+        <h2>1.4 Iterative Denoising</h2>
+        <p>In this section, we enhance the denoising capabilities of the diffusion model by implementing iterative denoising. While single-step denoising provides reasonable results, it struggles as noise levels increase. Iterative denoising addresses this by repeatedly reducing noise through multiple steps, starting from a noisy image until a clean image is recovered.</p>
+        <p>The iterative denoising process involves striding through timesteps, gradually moving from high noise to low noise. This approach leverages a linear interpolation between signal and noise to estimate clean images efficiently without requiring all 1000 diffusion steps. By skipping steps, we significantly reduce computation time and resource costs while maintaining quality.</p>
+        <h3>Deliverables</h3>
+        <ul>
+            <li>Generate a list of strided timesteps starting at 990 and stepping down by 30 until reaching 0.</li>
+            <li>Show the noisy image at every 5th loop of denoising.</li>
+            <li>Display the final clean image obtained through iterative denoising.</li>
+            <li>Compare results with single-step denoising and Gaussian blurring.</li>
+        </ul>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Iterative Denoising Progress</h4>
+            <figure>
+                <img src="media/parta_part1/denosing_1.png" alt="Noisy Image t=90">
+                <figcaption>Noisy Image at t=90</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/denoising_2.png" alt="Intermediate Image">
+                <figcaption>Intermediate Image</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/denoising_3.png" alt="Intermediate Image">
+                <figcaption>Intermediate Image</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/denoising_4.png" alt="Intermediate Image">
+                <figcaption>Intermediate Image</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/denoising_5.png" alt="Final Clean Image">
+                <figcaption>Final Clean Image</figcaption>
+            </figure>
+            <h4>Comparisons</h4>
+            <figure>
+                <img src="media/parta_part1/one_step_denoising_all.png" alt="One-Step Denoising">
+                <figcaption>One-Step Denoising</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/show_all_part1.4.png" alt="Gaussian Blurred Image">
+                <figcaption>Gaussian Blurred Image</figcaption>
+            </figure>
+        </div>
+    </section>
+    
+    <section>
+        <h2>1.5 Diffusion Model Sampling</h2>
+        <p>Using the iterative denoising function, we can generate entirely new images by starting with pure noise and progressively denoising. This allows us to create images from scratch that resemble realistic photographs.</p>
+        <h3>Deliverables</h3>
+        <ul>
+            <li>Generate five sampled images from pure noise using the iterative denoising method.</li>
+        </ul>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Generated Samples</h4>
+            <figure>
+                <img src="media/parta_part1/sample1_1.5.png" alt="Sample 1">
+                <figcaption>Sample 1</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample2_1.5.png" alt="Sample 2">
+                <figcaption>Sample 2</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample3_1.5.png" alt="Sample 3">
+                <figcaption>Sample 3</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample4_1.5.png" alt="Sample 4">
+                <figcaption>Sample 4</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample5_1.5.png" alt="Sample 5">
+                <figcaption>Sample 5</figcaption>
+            </figure>
+            <figure>
+                
+            </figure>
+        </div>
+    </section>
+    
+    <section>
+        <h2>1.6 Classifier-Free Guidance (CFG)</h2>
+        <p>Classifier-Free Guidance (CFG) improves the quality of generated images by balancing conditional and unconditional noise estimates. By amplifying the conditional signal, CFG produces more coherent and detailed images, albeit at the cost of reduced diversity.</p>
+        <h3>Deliverables</h3>
+        <ul>
+            <li>Generate five images using CFG with a scale of 7 and the prompt "a high quality photo."</li>
+        </ul>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Generated Samples with CFG</h4>
+            <figure>
+                <img src="media/parta_part1/sample1_true1.6.png" alt="Sample 1 with CFG">
+                <figcaption>Sample 1</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample2_true1.6.png" alt="Sample 2 with CFG">
+                <figcaption>Sample 2</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample3_true1.6.png" alt="Sample 3 with CFG">
+                <figcaption>Sample 3</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample4_true1.6.png" alt="Sample 4 with CFG">
+                <figcaption>Sample 4</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample5_true1.6.png" alt="Sample 5 with CFG">
+                <figcaption>Sample 5</figcaption>
+            </figure>
+        </div>
+    </section>
+    
+    <section>
+        <h2>1.7 Image-to-Image Translation</h2>
+        <p>This section explores using diffusion models for editing images. By adding controlled noise to an image and guiding its denoising process, we can generate modified versions of the original image while maintaining realism.</p>
+        <h3>Deliverables</h3>
+        <ul>
+            <li>Edit the provided test image at various noise levels ([1, 3, 5, 7, 10, 20]) with the prompt "a high quality photo."</li>
+            <li>Edit two custom images using the same procedure.</li>
+        </ul>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Test Image Edits</h4>
+            <figure>
+                <img src="media/parta_part1/test_image_noise_level1.png" alt="Noise Level 1">
+                <figcaption>Noise Level 1</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/test_image_noise3.png" alt="Noise Level 3">
+                <figcaption>Noise Level 3</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/test_noiselevel5.png" alt="Noise Level 5">
+                <figcaption>Noise Level 5</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/noise_level7_test_image.png" alt="Noise Level 7">
+                <figcaption>Noise Level 7</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/noise_level10_test_image.png" alt="Noise Level 10">
+                <figcaption>Noise Level 10</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/test_image_noise_20.png" alt="Noise Level 20">
+                <figcaption>Noise Level 20</figcaption>
+            </figure>
+            <h4>Custom Image Edits</h4>
+            <figure>
+                <img src="media/parta_part1/image.png" alt="Custom Image 1 Edit">
+                <figcaption>Custom Image 1 Edit</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/original_image.png" alt="Original Custom Image 1">
+                <figcaption>Original Custom Image 1</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/image copy.png" alt="Custom Image 2 Edit">
+                <figcaption>Custom Image 2 Edit</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/handdrawn_og_1.png" alt="Original Custom Image 2">
+                <figcaption>Original Custom Image 2</figcaption>
+            </figure>
+        </div>
+    </section>
+    
+    <header>
+        <h1>Part B: Diffusion Models from Scratch</h1>
+    </header>
+    <section>
+        <h2>Section 1: Overview</h2>
+        <p>In this part of the project, you will create and train a diffusion model from scratch using the MNIST dataset. The provided starter notebook includes all the necessary resources to get started. This is one of the most challenging projects of the semester, so starting early is highly recommended.</p>
+        <p>The project begins with implementing a single-step denoising UNet. This model is designed to take a noisy image and predict a clean version by optimizing an L2 loss. You will progressively build the architecture, train it using the MNIST dataset, and evaluate its performance on various noise levels.</p>
+        <p>The UNet architecture includes several standard tensor operations, such as downsampling, upsampling, and skip connections. The training process involves generating noisy images in real time, optimizing with an Adam optimizer, and visualizing the denoising results after multiple epochs. The project concludes with testing the denoiser on unseen noise levels to evaluate its robustness.</p>
+    </section>
+    <section>
+        <h2>Visualizations</h2>
+        <div class="image-container">
+            <figure>
+                <img src="media/Partb_part1/noising_process_over_sigma_values.png" alt="Noising Process Over Sigma Values">
+                <figcaption>Noising process using different sigma values</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part1/training_loss_curve_unet_part1.png" alt="Training Loss Curve">
+                <figcaption>Training loss curve during training</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part1/first_epoch_unet1.png" alt="Results After First Epoch">
+                <figcaption>Results after the first epoch</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part1/5th_epoch_unet1.png" alt="Results After Fifth Epoch">
+                <figcaption>Results after the fifth epoch</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part1/out_of_distribution_test_unet1.png" alt="Out-of-Distribution Noise Testing">
+                <figcaption>Results with out-of-distribution noise levels</figcaption>
+            </figure>
+        </div>
+    </section>
+    <section>
+        <h2>Part 2: Training a Diffusion Model</h2>
+        <p>In this section, we build upon the concepts introduced earlier to train a diffusion model using a UNet architecture. The focus is on implementing a Denoising Diffusion Probabilistic Model (DDPM) to iteratively denoise an image and generate realistic outputs from pure noise.</p>
+        <p>Rather than predicting clean images directly, the UNet is trained to predict the added noise in the noisy image. This approach simplifies training while maintaining equivalence to previous objectives. The training involves iteratively denoising noisy images generated at varying timesteps, where the noise variance is controlled by a predefined schedule.</p>
+        <p>To condition the UNet on the timestep, we introduce a fully-connected block (FCBlock) that injects the scalar timestep into the network. This conditioning is normalized to a range of [0, 1] and modulates specific layers in the UNet architecture.</p>
+        <h3>2.1 Adding Time Conditioning to UNet</h3>
+        <p>The time-conditioned UNet modifies key layers to incorporate timestep information. A new operator, FCBlock, embeds the normalized timestep into the architecture. The embedded signal modulates layers such as unflattening and upsampling blocks, effectively conditioning the model on the current timestep during denoising.</p>
+        <h3>2.2 Training the UNet</h3>
+        <p>The training process involves randomly selecting an image and a timestep, adding noise to the image based on the timestep, and training the UNet to predict the noise. The model is optimized with an Adam optimizer and uses exponential learning rate decay to ensure convergence over 20 epochs.</p>
+        <p><strong>Objective:</strong> Train a time-conditioned UNet to predict noise in a given noisy image for any timestep. The MNIST dataset is used, with a batch size of 128 and a hidden dimension of 64 for the UNet. The training loss is monitored throughout the process.</p>
+        <figure>
+            <img src="media/Partb_part2/algo1_time_conditioned_training.png" alt="Algorithm for Training the Time-Conditioned UNet">
+            <figcaption>Algorithm for training the time-conditioned UNet</figcaption>
+        </figure>
+        <h3>2.3 Sampling from the UNet</h3>
+        <p>Once trained, the UNet can iteratively denoise a pure noise image to generate realistic outputs. The sampling process uses the variance schedule defined during training and does not require variance prediction. Sampling results are visualized for different training epochs to demonstrate the model's progress.</p>
+        <figure>
+            <img src="media/Partb_part2/sampling_time_conditioned.png" alt="Algorithm for Sampling from Time-Conditioned UNet">
+            <figcaption>Algorithm for sampling from the time-conditioned UNet</figcaption>
+        </figure>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <figure>
+                <img src="media/Partb_part2/training_loss_partb_time_conditioned.png" alt="Training Loss Curve">
+                <figcaption>Training loss curve for the time-conditioned UNet</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part2/epoch_5_examples.png" alt="Sampling Results After 5 Epochs">
+                <figcaption>Sampling results after 5 epochs</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part2/epoch_20_examples.png" alt="Sampling Results After 20 Epochs">
+                <figcaption>Sampling results after 20 epochs</figcaption>
+            </figure>
+        </div>
+    </section>
+    <section>
+        <h2>2.4 Adding Class-Conditioning to UNet</h2>
+        <p>To further improve results and provide more control over image generation, we can optionally condition the UNet on the class of the digit (0-9). This involves adding two more FCBlocks to the UNet and using a one-hot vector to represent the class. To maintain flexibility, we incorporate a dropout mechanism where the class-conditioning vector is set to zero 10% of the time.</p>
+        <p>Class-conditioning integrates both time and class information into the UNet architecture. This is done by modulating the network layers with both time and class embeddings, allowing for better and more controlled image generation.</p>
+        <figure>
+            <img src="media/Partb_part2/class_conditioned_training_alog.png" alt="Algorithm for Training Class-Conditioned UNet">
+            <figcaption>Algorithm for training the class-conditioned UNet</figcaption>
+        </figure>
+        <h3>Training Process</h3>
+        <p>The training process for the class-conditioned UNet is similar to the time-only conditioning setup, with the addition of the class-conditioning vector. Periodic unconditional generation is also performed to ensure the model works without class information. The network is optimized to predict noise while incorporating both time and class conditioning.</p>
+        <figure>
+            <img src="media/Partb_part2/training_class_conditioned_loss.png" alt="Class-Conditioned Training Loss Curve">
+            <figcaption>Class-conditioned UNet training loss curve</figcaption>
+        </figure>
+        <h3>2.5 Sampling from the Class-Conditioned UNet</h3>
+        <p>Sampling from the class-conditioned UNet follows a similar procedure as in time-only conditioning, but with classifier-free guidance for improved conditional results. This process ensures high-quality digit generation across all classes.</p>
+        <figure>
+            <img src="media/Partb_part2/class_conditioned_sampling_alog.png" alt="Algorithm for Sampling from Class-Conditioned UNet">
+            <figcaption>Algorithm for sampling from the class-conditioned UNet</figcaption>
+        </figure>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <figure>
+                <img src="media/Partb_part2/epoch4_examples_class_conditioned.png" alt="Class-Conditioned Sampling Results After 5 Epochs">
+                <figcaption>Sampling results after 5 epochs</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part2/epoch_20_examples_class_conditioned.png" alt="Class-Conditioned Sampling Results After 20 Epochs">
+                <figcaption>Sampling results after 20 epochs</figcaption>
+            </figure>
+        </div>
+    </section>
+    
+    
+    
+</body>
+</html>
