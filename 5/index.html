@@ -141,7 +141,6 @@
         </ul>
         <h3>Visualizations</h3>
         <div class="image-container">
-            <h4>Generated Samples</h4>
             <figure>
                 <img src="media/parta_part1/sample1_1.5.png" alt="Sample 1">
                 <figcaption>Sample 1</figcaption>
@@ -163,7 +162,24 @@
                 <figcaption>Sample 5</figcaption>
             </figure>
             <figure>
-                
+                <img src="media/parta_part1/sample1_1.6.png" alt="Extra Sample 1">
+                <figcaption>Extra Sample 1</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample2_1.6.png" alt="Extra Sample 2">
+                <figcaption>Extra Sample 2</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample3_1.6.png" alt="Extra Sample 3">
+                <figcaption>Extra Sample 3</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample4_1.6.png" alt="Extra Sample 4">
+                <figcaption>Extra Sample 4</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/sample5_1.6.png" alt="Extra Sample 5">
+                <figcaption>Extra Sample 5</figcaption>
             </figure>
         </div>
     </section>
@@ -253,8 +269,132 @@
                 <img src="media/parta_part1/handdrawn_og_1.png" alt="Original Custom Image 2">
                 <figcaption>Original Custom Image 2</figcaption>
             </figure>
+            <h4>Second Hand-Drawn Image</h4>
+            <figure>
+                <img src="media/parta_part1/image copy 2.png" alt="Edited Second Hand-Drawn Image">
+                <figcaption>Edited Second Hand-Drawn Image</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_part1/image copy 2.png" alt="Original Second Hand-Drawn Image">
+                <figcaption>Original Second Hand-Drawn Image</figcaption>
+            </figure>
         </div>
     </section>
+    <section>
+        <h2>1.7.2 Inpainting</h2>
+        <p>Inpainting allows us to edit specific regions of an image while preserving other parts. Using a binary mask, we define areas to be inpainted by the diffusion model, which fills these regions with new content consistent with the natural image manifold.</p>
+        <h3>Deliverables</h3>
+        <ul>
+            <li>Inpaint the top of the Campanile using a predefined mask.</li>
+            <li>Edit two custom images with user-defined masks for creative inpainting.</li>
+        </ul>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Test Image Inpainting</h4>
+            <figure>
+                <img src="media/parta_partinpainting/test_image_inpainted.png" alt="Inpainted Test Image">
+                <figcaption>Inpainted Test Image</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_partinpainting/og_inpainting_ref.png" alt="Original Reference for Inpainting">
+                <figcaption>Original Reference for Inpainting</figcaption>
+            </figure>
+            <h4>Custom Image Inpainting</h4>
+            <figure>
+                <img src="media/parta_partinpainting/inpainting_2_finished.png" alt="Inpainted Custom Image 1">
+                <figcaption>Inpainted Custom Image 1</figcaption>
+            </figure>
+            <figure>
+                <img src="media/parta_partinpainting/inpainting_aot_2.png" alt="Original Custom Image 1">
+                <figcaption>Original Custom Image 1</figcaption>
+            </figure>
+            <h4>Custom Image Inpainting</h4>
+            <figure>
+                <img src="media/parta_partinpainting/1st_image_og_inpainting.png" alt="Inpainted Custom Image 2">
+                <figcaption>Inpainted Custom Image 2</figcaption>
+            </figure>
+        </div>
+    </section>
+    <section>
+        <h2>1.7.3 Text-Conditional Image-to-Image Translation</h2>
+        <p>This section adds text-based control to the image denoising process, guiding the projection onto the natural image manifold using a specific text prompt. By replacing the prompt "a high quality photo" with other precomputed prompts, we can create images that reflect both the input noise and the specified text description.</p>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <h4>Test Image Edits</h4>
+            <figure>
+                <img src="media/parta_part1.7.3/1.7.3_image.png" alt="Edited Test Image">
+            </figure>
+            <h4>Custom Image Edits</h4>
+            <figure>
+                <img src="media/parta_part1.7.3/image.png" alt="Custom Image 1 Edit">
+            </figure>
+            <figure>
+                <img src="media/parta_part1.7.3/image copy.png" alt="Custom Image 2 Edit">
+            </figure>
+            <figure>
+                <img src="media/parta_part1.7.3/image copy 2.png" alt="Custom Image 3 Edit">
+            </figure>
+        </div>
+    </section>
+    
+    <section>
+        <h2>1.8 Visual Anagrams</h2>
+        <p>Visual anagrams combine two images into one, displaying different visuals when flipped upside down. For example, an image might depict "an oil painting of people around a campfire" upright and "an oil painting of an old man" when flipped.</p>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <figure>
+                <img src="media/parta_part1.7.3/old_man.png" alt="An Oil Painting of an Old Man">
+            </figure>
+            <figure>
+                <img src="media/parta_part1.7.3/peopel_around_campfire.png" alt="An Oil Painting of People Around a Campfire">
+            </figure>
+            <figure>
+                <img src="media/part_part1.8/own_example_inpainting.png" alt="Custom Visual Anagram Example 1">
+            </figure>
+            <figure>
+                <img src="media/part_part1.8/own_example_inpainting_skull_like_flipped_2.png" alt="Flipped Custom Visual Anagram Example 1">
+            </figure>
+            <figure>
+                <img src="media/part_part1.8/own_example_inpainting_2.png" alt="Custom Visual Anagram Example 2">
+            </figure>
+            <figure>
+                <img src="media/part_part1.8/own_example_inpainting_flipped_2.png" alt="Flipped Custom Visual Anagram Example 2">
+            </figure>
+            <figure>
+                <img src="media/part_part1.8/own_example_inpainting_1.png" alt="Custom Visual Anagram Example 3">
+            </figure>
+            <figure>
+                <img src="media/part_part1.8/own_example_flipped.png" alt="Flipped Custom Visual Anagram Example 3">
+            </figure>
+        </div>
+    </section>
+    
+    <section>
+        <h2>1.9 Hybrid Images</h2>
+        <p>Hybrid images combine two concepts, displaying one at a distance and another up close by blending low and high-frequency noise estimates. For example, a skull image can transform into a lithograph of a waterfall when viewed closely.</p>
+        <h3>Visualizations</h3>
+        <div class="image-container">
+            <figure>
+                <img src="media/part1.9/hat_oil_painting_snowy_mountain.png" alt="Hybrid Image 1">
+            </figure>
+            <figure>
+                <img src="media/part1.9/rocket_ship_water_fall.png" alt="Hybrid Image 2">
+            </figure>
+            <figure>
+                <img src="media/part1.9/skull_waterfall.png" alt="Hybrid Image 3">
+            </figure>
+            <figure>
+                <img src="media/part1.9/waterfall1.png" alt="Waterfall Detail 1">
+            </figure>
+            <figure>
+                <img src="media/part1.9/waterfall2.png" alt="Waterfall Detail 2">
+            </figure>
+            <figure>
+                <img src="media/part1.9/waterfall3.png" alt="Waterfall Detail 3">
+            </figure>
+        </div>
+    </section>
+    
     
     <header>
         <h1>Part B: Diffusion Models from Scratch</h1>
