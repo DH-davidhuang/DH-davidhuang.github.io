@@ -60,43 +60,48 @@
         <h3>Overview</h3>
         <p>Diffusion models are trained to reverse the process of progressively adding noise to an image. Starting with a clean image, noise is incrementally added until it becomes indistinguishable from pure noise. The diffusion model takes this noisy image at a given timestep and predicts the noise to reconstruct the original image.</p>
         <p>DeepFloyd is a powerful two-stage text-to-image diffusion model, capable of generating high-quality images. In this part, you will use pretrained models to explore how diffusion works, implement sampling loops, and test its performance on various tasks.</p>
-        <h3>Deliverables</h3>
-        <ul>
-            <li>For the provided text prompts, display captions alongside the generated images, reflecting on their quality and relationship to the prompts.</li>
-            <li>Implement a forward process to add noise to a test image and visualize the results at different noise levels.</li>
-            <li>Experiment with classical denoising methods like Gaussian blur to compare their performance against diffusion models.</li>
-            <li>Use a pretrained diffusion model to perform one-step denoising and evaluate its accuracy in reconstructing images.</li>
-        </ul>
         <h3>Visualizations</h3>
-        <div class="image-container">
-            <h4>Test Image with Various Noise Levels</h4>
-            <figure>
-                <img src="media/parta_part1/test_image_at_various_noise_part1.png" alt="Test Image at Various Noise Levels">
-                <figcaption>Progressively noisy test image at timesteps t = [250, 500, 750]</figcaption>
-            </figure>
+        <section>
+            <p>DeepFloyd uses text prompts to generate aligned images, with "a high quality photo" acting as a null prompt for unconditional generation. This forces noisy images onto the natural image manifold. Images with more number of inference steps taken (more denoising) actually ocurring are more blurry and lower quality signifying noise and are less represenative than ones with more infernece steps taken where they get more robotic but result in higher quality images that represent the prompt more accurately and precisely</p>
+            <div class="image-container">
+                <figure>
+                    <img src="media/sampling_images/image copy.png" alt="Sampling with num_inference_steps=5">
+                    <figcaption>Sampling with num_inference_steps=5</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/sampling_images/image.png" alt="Sampling with num_inference_steps=20">
+                    <figcaption>Sampling with num_inference_steps=20</figcaption>
+                </figure>
+            </div>
+        </section>
+        <section>
+            <h3>Test Image with Various Noise Levels</h3>
+            <div class="image-container">
+                <figure>
+                    <img src="media/extra_images/image.png" alt="Test Image with Various Noise Levels">
+                    <figcaption>Progressively noisy test image at timesteps t = [250, 500, 750]</figcaption>
+                </figure>
+            </div>
             <h4>Gaussian Denoising</h4>
-            <figure>
-                <img src="media/parta_part1/guassian_denoised.png" alt="Gaussian Denoising Results">
-                <figcaption>Gaussian-denoised images for t = [250, 500, 750]</figcaption>
-            </figure>
+            <div class="image-container">
+                <figure>
+                    <img src="media/extra_images/image copy.png" alt="Gaussian Denoising Results">
+                    <figcaption>Gaussian-denoised images for t = [250, 500, 750]</figcaption>
+                </figure>
+            </div>
             <h4>One-Step Denoising</h4>
-            <figure>
-                <img src="media/parta_part1/one_step_denoising_all.png" alt="One-Step Denoising Results">
-                <figcaption>Original, noisy, and denoised images using a pretrained diffusion model</figcaption>
-            </figure>
-        </div>
+            <div class="image-container">
+                <figure>
+                    <img src="media/extra_images/image copy 2.png" alt="One-Step Denoising Results">
+                    <figcaption>Original, noisy, and denoised images using a pretrained diffusion model</figcaption>
+                </figure>
+            </div>
+        </section>
     </section>
     <section>
         <h2>1.4 Iterative Denoising</h2>
         <p>In this section, we enhance the denoising capabilities of the diffusion model by implementing iterative denoising. While single-step denoising provides reasonable results, it struggles as noise levels increase. Iterative denoising addresses this by repeatedly reducing noise through multiple steps, starting from a noisy image until a clean image is recovered.</p>
         <p>The iterative denoising process involves striding through timesteps, gradually moving from high noise to low noise. This approach leverages a linear interpolation between signal and noise to estimate clean images efficiently without requiring all 1000 diffusion steps. By skipping steps, we significantly reduce computation time and resource costs while maintaining quality.</p>
-        <h3>Deliverables</h3>
-        <ul>
-            <li>Generate a list of strided timesteps starting at 990 and stepping down by 30 until reaching 0.</li>
-            <li>Show the noisy image at every 5th loop of denoising.</li>
-            <li>Display the final clean image obtained through iterative denoising.</li>
-            <li>Compare results with single-step denoising and Gaussian blurring.</li>
-        </ul>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Iterative Denoising Progress</h4>
@@ -135,10 +140,6 @@
     <section>
         <h2>1.5 Diffusion Model Sampling</h2>
         <p>Using the iterative denoising function, we can generate entirely new images by starting with pure noise and progressively denoising. This allows us to create images from scratch that resemble realistic photographs.</p>
-        <h3>Deliverables</h3>
-        <ul>
-            <li>Generate five sampled images from pure noise using the iterative denoising method.</li>
-        </ul>
         <h3>Visualizations</h3>
         <div class="image-container">
             <figure>
@@ -187,10 +188,6 @@
     <section>
         <h2>1.6 Classifier-Free Guidance (CFG)</h2>
         <p>Classifier-Free Guidance (CFG) improves the quality of generated images by balancing conditional and unconditional noise estimates. By amplifying the conditional signal, CFG produces more coherent and detailed images, albeit at the cost of reduced diversity.</p>
-        <h3>Deliverables</h3>
-        <ul>
-            <li>Generate five images using CFG with a scale of 7 and the prompt "a high quality photo."</li>
-        </ul>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Generated Samples with CFG</h4>
@@ -218,13 +215,10 @@
     </section>
     
     <section>
+       
+    <section>
         <h2>1.7 Image-to-Image Translation</h2>
         <p>This section explores using diffusion models for editing images. By adding controlled noise to an image and guiding its denoising process, we can generate modified versions of the original image while maintaining realism.</p>
-        <h3>Deliverables</h3>
-        <ul>
-            <li>Edit the provided test image at various noise levels ([1, 3, 5, 7, 10, 20]) with the prompt "a high quality photo."</li>
-            <li>Edit two custom images using the same procedure.</li>
-        </ul>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Test Image Edits</h4>
@@ -252,32 +246,51 @@
                 <img src="media/parta_part1/test_image_noise_20.png" alt="Noise Level 20">
                 <figcaption>Noise Level 20</figcaption>
             </figure>
-            <h4>Custom Image Edits</h4>
+            <h4>Additional Images</h4>
             <figure>
-                <img src="media/parta_part1/image.png" alt="Custom Image 1 Edit">
-                <figcaption>Custom Image 1 Edit</figcaption>
+                <img src="media/extra_images/berkeley_campus_processed_image.png" alt="Processed Berkeley Campus Image">
             </figure>
             <figure>
-                <img src="media/parta_part1/original_image.png" alt="Original Custom Image 1">
-                <figcaption>Original Custom Image 1</figcaption>
+                <img src="media/extra_images/berkeley_image_noise_level1.png" alt="Noise Level 1 - Berkeley">
             </figure>
             <figure>
-                <img src="media/parta_part1/image copy.png" alt="Custom Image 2 Edit">
-                <figcaption>Custom Image 2 Edit</figcaption>
+                <img src="media/extra_images/berkeley_image_noise3.png" alt="Noise Level 3 - Berkeley">
             </figure>
             <figure>
-                <img src="media/parta_part1/handdrawn_og_1.png" alt="Original Custom Image 2">
-                <figcaption>Original Custom Image 2</figcaption>
-            </figure>
-            <h4>Second Hand-Drawn Image</h4>
-            <figure>
-                <img src="media/parta_part1/image copy 2.png" alt="Edited Second Hand-Drawn Image">
-                <figcaption>Edited Second Hand-Drawn Image</figcaption>
+                <img src="media/extra_images/berkeley_image_noise_level5.png" alt="Noise Level 5 - Berkeley">
             </figure>
             <figure>
-                <img src="media/parta_part1/image copy 2.png" alt="Original Second Hand-Drawn Image">
-                <figcaption>Original Second Hand-Drawn Image</figcaption>
+                <img src="media/extra_images/berkeley_image_noise_level7.png" alt="Noise Level 7 - Berkeley">
             </figure>
+            <figure>
+                <img src="media/extra_images/berkeley_image_noise_level10.png" alt="Noise Level 10 - Berkeley">
+            </figure>
+            <figure>
+                <img src="media/extra_images/berkeley_noise_image_level20.png" alt="Noise Level 20 - Berkeley">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_noise_level1.png" alt="Noise Level 1 - Oski">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_image_processed.png" alt="Processed Oski Image">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_noise_level3.png" alt="Noise Level 3 - Oski">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_noise_level5.png" alt="Noise Level 5 - Oski">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_noise_level7.png" alt="Noise Level 7 - Oski">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_noise_level10.png" alt="Noise Level 10 - Oski">
+            </figure>
+            <figure>
+                <img src="media/extra_images/oski_noise_level20.png" alt="Noise Level 20 - Oski">
+            </figure>
+        </div>
+    </section>
         </div>
     </section>
     <section>
@@ -334,6 +347,9 @@
             <figure>
                 <img src="media/parta_part1.7.3/image copy 2.png" alt="Custom Image 3 Edit">
             </figure>
+            <!-- <figure> -->
+                <!-- <img src="media/extra_images_hybrid/extra_example_1.7.3.png" alt="Extra Example 1"> -->
+            <!-- </figure> -->
         </div>
     </section>
     
@@ -366,6 +382,21 @@
             <figure>
                 <img src="media/part_part1.8/own_example_flipped.png" alt="Flipped Custom Visual Anagram Example 3">
             </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/better_skull_waterfall_1.8.png" alt="Improved Skull and Waterfall">
+            </figure>
+            <!-- <figure> -->
+                <!-- <img src="media/extra_images_hybrid/better_waterfall_1.8.png" alt="Improved Waterfall Image"> -->
+            <!-- </figure> -->
+            <figure>
+                <img src="media/extra_images_hybrid/flipped_skull_water_fall_1.8.png" alt="Flipped Skull and Waterfall">
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/another_campfire.png" alt="Another Campfire Image">
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/another_oldman.png" alt="Another Old Man Image">
+            </figure>
         </div>
     </section>
     
@@ -392,9 +423,29 @@
             <figure>
                 <img src="media/part1.9/waterfall3.png" alt="Waterfall Detail 3">
             </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/better_hybrid_litograph_waterfall_with_rocketship.png" alt="Improved Rocketship Waterfall Hybrid">
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/better_pencil_rocket_ship_hybrid.png" alt="Improved Pencil and Rocketship Hybrid">
+            </figure>
+            <figure>
+                <!-- <img src="media/extra_images_hybrid/better_waterfall_snowy_mountain_1.8.png" alt="Improved Snowy Mountain Waterfall Hybrid"> -->
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/better_waterfall_rocket_ship.png" alt="Better Rocketship Waterfall">
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/dog_waterfall_hybrid.png" alt="Dog and Waterfall Hybrid">
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/great_hat_rocket_hybrid.png" alt="Hat and Rocketship Hybrid">
+            </figure>
+            <figure>
+                <img src="media/extra_images_hybrid/slightlybetter_1.9_hybrid.png" alt="Slightly Improved Hybrid">
+            </figure>
         </div>
     </section>
-    
     
     <header>
         <h1>Part B: Diffusion Models from Scratch</h1>
@@ -493,8 +544,36 @@
                 <figcaption>Sampling results after 5 epochs</figcaption>
             </figure>
             <figure>
+                <img src="media/Partb_part2/first_example_4.png" alt="Example 1">
+                <figcaption>Example 1</figcaption>
+            </figure>
+                <img src="media/Partb_part2/2nd_example_4.png" alt="Example 1">
+                <figcaption>Example 2</figcaption>   
+            </figure>
+            <figure>
+                <img src="media/Partb_part2/3rd_example_4.png" alt="Example 1">
+                <figcaption>Example 3</figcaption>
+            </figure>
+                <img src="media/Partb_part2/4_example_4.png" alt="Example 1">
+                <figcaption>Example 4</figcaption>   
+            </figure>
+            <figure>
                 <img src="media/Partb_part2/epoch_20_examples_class_conditioned.png" alt="Class-Conditioned Sampling Results After 20 Epochs">
                 <figcaption>Sampling results after 20 epochs</figcaption>
+            </figure>
+            <figure>
+                <img src="media/Partb_part2/example1_epoch20.png" alt="Example 1">
+                <figcaption>Example 1</figcaption>
+            </figure>
+                <img src="media/Partb_part2/example2_epoch20.png" alt="Example 1">
+                <figcaption>Example 2</figcaption>   
+            </figure>
+            <figure>
+                <img src="media/Partb_part2/example3_epoch20.png" alt="Example 1">
+                <figcaption>Example 3</figcaption>
+            </figure>
+                <img src="media/Partb_part2/example4_epoch20.png" alt="Example 1">
+                <figcaption>Example 4</figcaption>   
             </figure>
         </div>
     </section>
