@@ -56,10 +56,9 @@
 <body>
     <section>
         <h2>Part A: The Power of Diffusion Models!</h2>
-        <p>Part A is an introductory exploration of diffusion models, focusing on their potential for generating and manipulating images. This section aims to familiarize you with the basics of diffusion models through tasks like implementing sampling loops, inpainting, and creating optical illusions. You will use the pretrained DeepFloyd IF model to complete these tasks and visualize your results.</p>
         <h3>Overview</h3>
         <p>Diffusion models are trained to reverse the process of progressively adding noise to an image. Starting with a clean image, noise is incrementally added until it becomes indistinguishable from pure noise. The diffusion model takes this noisy image at a given timestep and predicts the noise to reconstruct the original image.</p>
-        <p>DeepFloyd is a powerful two-stage text-to-image diffusion model, capable of generating high-quality images. In this part, you will use pretrained models to explore how diffusion works, implement sampling loops, and test its performance on various tasks.</p>
+        <p>DeepFloyd is a powerful two-stage text-to-image diffusion model, capable of generating high-quality images.</p>
         <h3>Visualizations</h3>
         <section>
             <p>DeepFloyd uses text prompts to generate aligned images, with "a high quality photo" acting as a null prompt for unconditional generation. This forces noisy images onto the natural image manifold. Images with more number of inference steps taken (more denoising) actually ocurring are more blurry and lower quality signifying noise and are less represenative than ones with more infernece steps taken where they get more robotic but result in higher quality images that represent the prompt more accurately and precisely</p>
@@ -100,8 +99,8 @@
     </section>
     <section>
         <h2>1.4 Iterative Denoising</h2>
-        <p>In this section, we enhance the denoising capabilities of the diffusion model by implementing iterative denoising. While single-step denoising provides reasonable results, it struggles as noise levels increase. Iterative denoising addresses this by repeatedly reducing noise through multiple steps, starting from a noisy image until a clean image is recovered.</p>
-        <p>The iterative denoising process involves striding through timesteps, gradually moving from high noise to low noise. This approach leverages a linear interpolation between signal and noise to estimate clean images efficiently without requiring all 1000 diffusion steps. By skipping steps, we significantly reduce computation time and resource costs while maintaining quality.</p>
+        <p>In this section, we enhance the denoising capabilities of the diffusion model by implementing iterative denoising. While single-step denoising provides reasonable results, it seems to struggle more greatly as noise levels increase. This makes intuitive sense as we are further from the distribution of the natural manifold of images, which would intuitively be an incredibly small subset of the distribution of pixels in general which is mostly just imperceptible noise to us. Iterative denoising trys to help with this by repeatedly reducing noise through multiple steps, starting from a noisy image until a clean image is recovered. As such if the model learns a random walk/path from noise to the natural image manifold through iteration we can do this and expect better results.</p>
+        <p>The iterative denoising process involves striding through timesteps, gradually moving from high noise to low noise. This approach leverages a sort of linear interpolation between signal and noise to estimate clean images efficiently without requiring all 1000 diffusion steps. By skipping steps, we make progress faster during inference time which is great!</p>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Iterative Denoising Progress</h4>
@@ -187,7 +186,7 @@
     
     <section>
         <h2>1.6 Classifier-Free Guidance (CFG)</h2>
-        <p>Classifier-Free Guidance (CFG) improves the quality of generated images by balancing conditional and unconditional noise estimates. By amplifying the conditional signal, CFG produces more coherent and detailed images, albeit at the cost of reduced diversity.</p>
+        <p>Classifier-Free Guidance (CFG) improves the quality of generated images by balancing conditional and unconditional noise estimates. By amplifying the conditional signal, CFG produces more coherent and detailed images, albeit at the cost of reduced diversity, which in hindsight seems more definitional than reality - unsure?</p>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Generated Samples with CFG</h4>
@@ -218,7 +217,7 @@
        
     <section>
         <h2>1.7 Image-to-Image Translation</h2>
-        <p>This section explores using diffusion models for editing images. By adding controlled noise to an image and guiding its denoising process, we can generate modified versions of the original image while maintaining realism.</p>
+        <p>This section explores using diffusion models for editing images. By adding controlled noise to an image and guiding the translation into noise - i.e. or the denoising process, we can generate modified versions of the original image while maintaining realism, which intuitively feels as though we are going around a small epsilon bound within the current image while staying on the natural image manifold.</p>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Test Image Edits</h4>
@@ -295,12 +294,7 @@
     </section>
     <section>
         <h2>1.7.2 Inpainting</h2>
-        <p>Inpainting allows us to edit specific regions of an image while preserving other parts. Using a binary mask, we define areas to be inpainted by the diffusion model, which fills these regions with new content consistent with the natural image manifold.</p>
-        <h3>Deliverables</h3>
-        <ul>
-            <li>Inpaint the top of the Campanile using a predefined mask.</li>
-            <li>Edit two custom images with user-defined masks for creative inpainting.</li>
-        </ul>
+        <p>Inpainting allows us to edit specific regions of an image while preserving other parts. Using a binary mask, we basically force the model to "fill" in the image with something that makes sense with the rest of the image while travelling to the natural image manifold (it is quite conditional in that sense as we can see in the results below, they make semantic sense visually speaking).</p>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Test Image Inpainting</h4>
@@ -330,7 +324,7 @@
     </section>
     <section>
         <h2>1.7.3 Text-Conditional Image-to-Image Translation</h2>
-        <p>This section adds text-based control to the image denoising process, guiding the projection onto the natural image manifold using a specific text prompt. By replacing the prompt "a high quality photo" with other precomputed prompts, we can create images that reflect both the input noise and the specified text description.</p>
+        <p>This section adds text-based control to the image denoising process, guiding the projection onto the natural image manifold using a specific text prompt. By replacing the prompt "a high quality photo" with other precomputed prompts, we can create images that reflect both the input noise and the specified text description. Below are some pretty cool examples. It appears that the conditioning of the prompt steers the diffusion model a lot during the initial step as one of the examples essentially is a rocket ship and slowly merges with the original input image as it approaches that distribution of specific pixels, which results in a merge of both concepts that visually makes sense to us so that was really cool to see!</p>
         <h3>Visualizations</h3>
         <div class="image-container">
             <h4>Test Image Edits</h4>
@@ -355,7 +349,7 @@
     
     <section>
         <h2>1.8 Visual Anagrams</h2>
-        <p>Visual anagrams combine two images into one, displaying different visuals when flipped upside down. For example, an image might depict "an oil painting of people around a campfire" upright and "an oil painting of an old man" when flipped.</p>
+        <p>The visual anagram is supposed to "combine" two images into one, where if we flip it, it displays a different image visually than when it was right side up. I have included an image depicting the oil painting of people around a campfire as well as the oldman in two cases as well as my own images for this. Feel free to zoom in for best visibility here.</p>
         <h3>Visualizations</h3>
         <div class="image-container">
             <figure>
@@ -452,9 +446,9 @@
     </header>
     <section>
         <h2>Section 1: Overview</h2>
-        <p>In this part of the project, you will create and train a diffusion model from scratch using the MNIST dataset. The provided starter notebook includes all the necessary resources to get started. This is one of the most challenging projects of the semester, so starting early is highly recommended.</p>
-        <p>The project begins with implementing a single-step denoising UNet. This model is designed to take a noisy image and predict a clean version by optimizing an L2 loss. You will progressively build the architecture, train it using the MNIST dataset, and evaluate its performance on various noise levels.</p>
-        <p>The UNet architecture includes several standard tensor operations, such as downsampling, upsampling, and skip connections. The training process involves generating noisy images in real time, optimizing with an Adam optimizer, and visualizing the denoising results after multiple epochs. The project concludes with testing the denoiser on unseen noise levels to evaluate its robustness.</p>
+        <p>In this part of the project, we create and train a diffusion model from scratch using the MNIST dataset.</p>
+        <p>The project begins with implementing a single-step denoising UNet. This model is designed to take a noisy image and predict a clean version by optimizing an L2 loss, which would be the reconstruction loss measured in euclidean terms. We could use other norms but this is cts properties that make it easy intuitively to work with when we are travelling from noise to "images."</p>
+        <p>The UNet architecture includes several standard tensor operations, such as downsampling, upsampling, and skip connections. The training process overall includes generating noisy images in real time by sampling pixels iteratively from a guassian normally standard distribution (curious to see what happens if we do it from  different distributions, are some easier to train then others??), optimizing with an Adam optimizer, and visualizing the denoising results after multiple epochs - pretty standard stuff.</p>
     </section>
     <section>
         <h2>Visualizations</h2>
@@ -483,13 +477,13 @@
     </section>
     <section>
         <h2>Part 2: Training a Diffusion Model</h2>
-        <p>In this section, we build upon the concepts introduced earlier to train a diffusion model using a UNet architecture. The focus is on implementing a Denoising Diffusion Probabilistic Model (DDPM) to iteratively denoise an image and generate realistic outputs from pure noise.</p>
+        <p>In this section, we build upon the concepts introduced earlier to train a diffusion model using a UNet architecture rather than using a pretrained one, so we can control a lot more aspects of the model. However, obviously we lose a lot of the pretrained model's capabilities since we can only build this in google collab with MNIST data. The main idea is to build a Denoising Diffusion Probabilistic Model (DDPM) to iteratively denoise an image and generate realistic outputs from pure noise like how the model worked conceptually in the previous section.</p>
         <p>Rather than predicting clean images directly, the UNet is trained to predict the added noise in the noisy image. This approach simplifies training while maintaining equivalence to previous objectives. The training involves iteratively denoising noisy images generated at varying timesteps, where the noise variance is controlled by a predefined schedule.</p>
-        <p>To condition the UNet on the timestep, we introduce a fully-connected block (FCBlock) that injects the scalar timestep into the network. This conditioning is normalized to a range of [0, 1] and modulates specific layers in the UNet architecture.</p>
+        <p>To condition the UNet on the timestep, we introduce a fully-connected block (FCBlock) that injects the scalar timestep into the network. This conditioning is normalized to a range of [0, 1] and modulates specific layers in the UNet architecture. This type of condiitoning is called time-conditioning, where we predict the noise added/removed at a specific time step. We also implement with classifier guidance as well as class conditioning to get the best results possible.</p>
         <h3>2.1 Adding Time Conditioning to UNet</h3>
-        <p>The time-conditioned UNet modifies key layers to incorporate timestep information. A new operator, FCBlock, embeds the normalized timestep into the architecture. The embedded signal modulates layers such as unflattening and upsampling blocks, effectively conditioning the model on the current timestep during denoising.</p>
+        <p>The time-conditioned UNet modifies key layers to incorporate timestep information basically through this FCBlock which is supposed to embed the normalized timestep, which we note is a monotonic transformation mathematically speaking so we don't lose the relative information contained in the timestep relative to the scope of timesteps we are training the model to be in distribution for, into the architecture. The embedded signal modulates layers such as unflattening and upsampling blocks, effectively conditioning the model on the current timestep during denoising.</p>
         <h3>2.2 Training the UNet</h3>
-        <p>The training process involves randomly selecting an image and a timestep, adding noise to the image based on the timestep, and training the UNet to predict the noise. The model is optimized with an Adam optimizer and uses exponential learning rate decay to ensure convergence over 20 epochs.</p>
+        <p>The training process involves randomly selecting an image and a timestep, adding noise to the image based on the timestep, and training the UNet to predict the noise, essentially creating this mapping of random walks from the guassian assumed distribution of noise images to the natural manifold. This makes sense why randomly sampling from pixels in a uniform distribution failed to work for the other model above since that was technically "out of distribution" noise pixels which only seems brighter to us but doesn't work with the pretrained  model - atleast that is what I thought just a side note. The model is optimized with an Adam optimizer and uses exponential learning rate decay to ensure convergence over 20 epochs.</p>
         <p><strong>Objective:</strong> Train a time-conditioned UNet to predict noise in a given noisy image for any timestep. The MNIST dataset is used, with a batch size of 128 and a hidden dimension of 64 for the UNet. The training loss is monitored throughout the process.</p>
         <figure>
             <img src="media/Partb_part2/algo1_time_conditioned_training.png" alt="Algorithm for Training the Time-Conditioned UNet">
@@ -519,7 +513,7 @@
     </section>
     <section>
         <h2>2.4 Adding Class-Conditioning to UNet</h2>
-        <p>To further improve results and provide more control over image generation, we can optionally condition the UNet on the class of the digit (0-9). This involves adding two more FCBlocks to the UNet and using a one-hot vector to represent the class. To maintain flexibility, we incorporate a dropout mechanism where the class-conditioning vector is set to zero 10% of the time.</p>
+        <p>To further improve results and provide more control over image generation, we can actually choose to condition the UNet on the class (since we are choosing to only generate 10 types of black and white images, this would be our natural manifold sample space which is mostly black and white completely binary pixels so it is an extremely small manifold of space that the model learns prety easily) of the digit (0-9). This involves adding two more FCBlocks to the UNet and using a one-hot vector to represent the class. To maintain utility between relying too much on conditioning and unconditioned model usecases, we can just directly incorporate a dropout mechanism where the class-conditioning vector is set to zero 10% of the time. Note this is not the same thing as actual model dropout where model internally are dropout off completely (neurons are off). This is more of a data augmentation technique where we have 10% of examples to be unconditioned generations and continue the reconstruction loss and optimizer steps there. </p>
         <p>Class-conditioning integrates both time and class information into the UNet architecture. This is done by modulating the network layers with both time and class embeddings, allowing for better and more controlled image generation.</p>
         <figure>
             <img src="media/Partb_part2/class_conditioned_training_alog.png" alt="Algorithm for Training Class-Conditioned UNet">
