@@ -163,21 +163,36 @@
         and feed them into a Neural Radiance Field MLP to predict density and color. Finally, I then volume render the scene 
         to compare against ground truth images and optimize the NeRF parameters.
     </p>
-
     <h3>Implementation Details</h3>
     <ul>
-        <li><strong>Ray and Sample Visualization:</strong> I implemented functions to transform coordinates between camera and world space, 
-            and generate rays for each pixel. I also discretize each ray into 3D sample points. The figures below show a visualization of the 
-            camera frustums, sampled rays, and sample points.</li>
-        <li><strong>MLP Architecture:</strong> The MLP takes as input 3D points (with positional encoding) and view directions (also encoded), 
-            and outputs density (via ReLU) and color (via Sigmoid). This deeper network includes skip connections to retain input signal 
-            and ensure stable training.</li>
-        <li><strong>Volume Rendering:</strong> I implemented the volume rendering equation such that. For each ray, we accumulate colors 
-            and densities from sampled points to produce a final pixel color. I also ensure the code passes the provided volume rendering assert test.</li>
-        <li><strong>Training Setup:</strong> I as advised by staff's hint use an Adam optimizer with a learning rate of 5e-4 and a batch size of 10K rays per iteration. 
-            The staff solution achieves ~23 PSNR after 1000 iterations with these settings.</li>
+        <li><strong>Ray and Sample Visualization:</strong>  
+            To build the foundation, I first implemented functions that accurately convert coordinates between camera and world reference frames. 
+            Using the camera extrinsics (c2w matrices) and intrinsics (K), I can determine the position and orientation of the camera in the scene. 
+            For each pixel in the image, I generate a ray that originates at the camera center and passes through that pixel in 3D space.  
+            Once I have these rays, I discretize them into a set of sample points along their path. This involves uniform sampling between a "near" and "far" bound, 
+            as well as optional random perturbations to spread out the sampling distribution. The visualizations below depict camera frustums (showing each camera’s field of view), 
+            rays extending from these cameras, and the sampled points along those rays. This ensures a comprehensive, spatially distributed set of 3D locations to query from the NeRF model.
+        </li>
+        <li><strong>MLP Architecture:</strong>  
+            The core of the NeRF is a Multi-Layer Perceptron (MLP) that takes in 3D world coordinates along with view directions and predicts both density (σ) and color (RGB). 
+            To enable the MLP to represent high-frequency details, I apply positional encoding to both positions and directions, expanding them into a higher-dimensional 
+            feature space using sinusoids at various frequencies. The network architecture includes skip connections that re-inject the original encoded input at deeper layers, 
+            helping the model retain and reconstruct finer details. The density is predicted via a ReLU layer to ensure non-negativity, and color predictions are passed through 
+            a Sigmoid layer to constrain output values between 0 and 1. These design choices follow the original NeRF paper and help in learning a stable, detailed 3D representation.
+        </li>
+        <li><strong>Volume Rendering:</strong>  
+            With density and color predictions for each sampled point, I integrate along the ray to produce a final pixel value. This step implements the volume rendering equation. 
+            By accumulating transmittance and absorption through the sampled points, I compute the expected color for each ray. To verify correctness, I test my volume rendering 
+            routine against a provided assert statement that checks known outputs for a given set of inputs. Passing this test ensures that the volume rendering logic is implemented correctly.
+        </li>
+        <li><strong>Training Setup:</strong>  
+            For optimization, I follow the staff’s suggested hyperparameters: an Adam optimizer with a learning rate of 5e-4, and a batch size of 10K rays sampled per iteration. 
+            Training the NeRF involves iteratively refining the network’s weights so that rendered images match the ground-truth training images from multiple viewpoints. 
+            According to the staff solution, these settings can achieve about 23 PSNR after around 1000 iterations. This combination of learning rate, batch size, and iteration count 
+            helps ensure a balance between stability, convergence speed, and final image quality.
+        </li>
     </ul>
-
+    
     <h3>Ray, Camera, and Sample Visualization</h3>
     <p>
         Below is an example visualization of rays and samples I also draw at a single training step, along with the camera poses. 
